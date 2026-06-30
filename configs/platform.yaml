@@ -1,0 +1,36 @@
+project:
+  name: azure-airline-operations-intelligence-platform
+  display_name: Azure Airline Operations Intelligence Platform
+  environment: local
+  version: 0.1.0
+
+runtime:
+  random_seed: 1729
+  logging_level: INFO
+
+paths:
+  data_raw: data/raw
+  data_interim: data/interim
+  data_processed: data/processed
+  outputs: outputs
+  reports: reports
+
+azure_service_mapping:
+  event_ingestion: Azure Event Hubs
+  data_lake_storage: Azure Data Lake Storage Gen2
+  stream_processing: Azure Stream Analytics
+  operational_telemetry_analytics: Azure Data Explorer
+  analytical_warehouse: Azure Synapse Analytics
+  machine_learning: Azure Machine Learning
+  genai_and_agent_capabilities: Azure AI Foundry
+  business_intelligence: Microsoft Power BI
+  monitoring: Azure Monitor and Application Insights
+  governance: Microsoft Purview
+  identity_and_secrets: Microsoft Entra ID and Azure Key Vault
+
+governance:
+  synthetic_data_only: true
+  allow_personal_data: false
+  require_lineage: true
+  require_human_review_for_consequential_decisions: true
+  safety_critical_use_allowed: false

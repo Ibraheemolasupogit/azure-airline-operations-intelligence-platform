@@ -1,0 +1,51 @@
+[build-system]
+requires = ["hatchling>=1.25,<2"]
+build-backend = "hatchling.build"
+
+[project]
+name = "airline-operations-intelligence"
+version = "0.1.0"
+description = "Local-first foundation for an Azure-mapped airline operations intelligence platform."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "Azure Airline Operations Intelligence Platform contributors" }]
+dependencies = [
+  "PyYAML>=6.0.2,<7",
+]
+
+[project.optional-dependencies]
+dev = [
+  "mypy>=1.10,<2",
+  "pytest>=8.2,<9",
+  "ruff>=0.5,<1",
+  "yamllint>=1.35,<2",
+  "pymarkdownlnt>=0.9,<1",
+]
+
+[project.scripts]
+airline-ops-intel = "airline_operations_intelligence.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/airline_operations_intelligence"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["B", "E", "F", "I", "UP", "W"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+warn_unused_configs = true
+packages = ["airline_operations_intelligence"]
+
+[tool.pytest.ini_options]
+addopts = "-q"
+testpaths = ["tests"]

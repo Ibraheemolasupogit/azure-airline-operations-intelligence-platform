@@ -1,0 +1,13 @@
+flowchart TB
+  Sources["Synthetic aviation sources"] --> Producers["Local producers / Azure Event Hubs mapping"]
+  Producers --> Landing["Raw landing zone / ADLS Gen2 mapping"]
+  Landing --> Quality["Validation and data-quality controls"]
+  Quality --> Curated["Curated operational datasets"]
+  Curated --> Services["Forecasting, prediction, anomaly and disruption services"]
+  Services --> Outputs["Operational outputs and model evidence"]
+  Outputs --> Consumption["Power BI, reports and GenAI operations assistant"]
+  Controls["Entra ID, Key Vault, Purview, Azure Monitor, CI/CD, model governance"] -. governs .- Producers
+  Controls -. governs .- Landing
+  Controls -. governs .- Quality
+  Controls -. governs .- Services
+  Controls -. governs .- Consumption

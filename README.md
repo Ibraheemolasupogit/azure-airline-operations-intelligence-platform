@@ -1,0 +1,121 @@
+# Azure Airline Operations Intelligence Platform
+
+This repository is the Milestone 1 foundation for a local-first airline operations
+intelligence platform mapped to Microsoft Azure services. It establishes the business
+scenario, architecture, governance principles, Python package boundaries, quality gate,
+and developer workflow.
+
+No synthetic datasets, ingestion pipelines, machine-learning models, GenAI assistants,
+dashboards, or Azure deployments are implemented in this milestone.
+
+## Business Problem
+
+An airline operations control centre needs a governed intelligence platform that combines
+planned and real-time operational data to identify delay risk, forecast passenger demand,
+monitor aircraft-health indicators, detect anomalies, assess disruption severity, understand
+network impact, and support recovery decisions.
+
+Initial data will be synthetic only. It must not represent real passengers, employees,
+aircraft defects, confidential schedules, or proprietary airline operations.
+
+## Intended Capabilities
+
+- Flight operations data ingestion.
+- Passenger-demand forecasting.
+- Flight-delay prediction.
+- Aircraft-health and predictive-maintenance analytics.
+- Disruption-risk scoring.
+- Recovery decision support.
+- Operational monitoring.
+- Power BI-ready analytical outputs.
+- Governed GenAI-assisted operations intelligence.
+- Azure architecture, governance, security, and deployment patterns.
+
+## Azure Service Mapping
+
+| Platform capability | Azure service |
+| --- | --- |
+| Event ingestion | Azure Event Hubs |
+| Data lake storage | Azure Data Lake Storage Gen2 |
+| Stream processing | Azure Stream Analytics |
+| Operational telemetry analytics | Azure Data Explorer |
+| Analytical warehouse | Azure Synapse Analytics |
+| Machine learning | Azure Machine Learning |
+| GenAI and agent capabilities | Azure AI Foundry |
+| Business intelligence | Microsoft Power BI |
+| Monitoring | Azure Monitor and Application Insights |
+| Governance | Microsoft Purview |
+| Identity and secrets | Microsoft Entra ID and Azure Key Vault |
+
+## Architecture Summary
+
+The target design uses synthetic aviation sources, local producers, a raw landing zone,
+validation controls, curated datasets, analytical and machine-learning services, operational
+outputs, reports, Power BI-ready artefacts, and future GenAI assistance. Cross-cutting
+controls cover identity, secrets, lineage, audit logging, monitoring, CI/CD, data quality,
+and model governance.
+
+See [platform overview](docs/architecture/platform-overview.md) and
+[target architecture](docs/architecture/target-architecture.md).
+
+## Repository Structure
+
+```text
+.
+├── .github/workflows/          # CI quality gate
+├── configs/                    # Non-secret configuration
+├── dashboard/                  # Future dashboard code
+├── data/                       # Empty local data zones
+├── diagrams/                   # Mermaid architecture diagrams
+├── docs/                       # Architecture, governance, operations, milestones
+├── outputs/                    # Future generated outputs, ignored by git
+├── reports/                    # Future reports, ignored by git
+├── scripts/                    # Future local automation scripts
+├── src/airline_operations_intelligence/
+│   ├── common/                 # Shared config, logging, exceptions
+│   └── ...                     # Future domain packages
+└── tests/                      # Unit, integration, and fixtures
+```
+
+## Local Setup
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+make install
+```
+
+Validate the repository foundation:
+
+```bash
+python3 -m airline_operations_intelligence.cli validate-repository
+```
+
+## Quality Commands
+
+```bash
+make format      # Apply Ruff formatting and lint fixes
+make lint        # Ruff lint and format checks
+make typecheck   # mypy strict type checking
+make test        # pytest
+make docs-check  # Markdown checks
+make yaml-check  # YAML checks
+make validate    # Repository validation CLI
+make quality     # Full local gate
+```
+
+## Roadmap
+
+Milestone 1 is complete when the repository foundation, architecture documentation, package
+layout, configuration, tests, quality tooling, and CI are in place. Later milestones add data
+generation, ingestion, analytics, ML, monitoring, GenAI, Power BI outputs, and Azure deployment
+architecture.
+
+See [roadmap](docs/milestones/roadmap.md).
+
+## Responsible Use
+
+This repository is an analytics and decision-support demonstration. It is not an airworthiness
+system, flight-control system, safety-management system, or certified aviation operational
+system. Future GenAI outputs must be grounded in governed evidence, distinguish facts from
+recommendations, and keep humans responsible for consequential operational decisions.
