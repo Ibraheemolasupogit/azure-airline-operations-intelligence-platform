@@ -42,3 +42,9 @@ jobs:
 
       - name: Generate CI synthetic data
         run: make generate-data-ci
+
+      - name: Validate CI synthetic data
+        run: make validate-data-ci
+
+      - name: Clean generated CI artefacts
+        run: make clean

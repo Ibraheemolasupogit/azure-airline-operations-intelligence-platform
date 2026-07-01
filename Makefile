@@ -1,6 +1,6 @@
 PYTHON ?= python3
 
-.PHONY: install format lint typecheck test docs-check yaml-check validate generate-data-ci test-data-generation quality clean
+.PHONY: install format lint typecheck test docs-check yaml-check validate generate-data-ci validate-data-ci test-data-generation test-ingestion-validation describe-validation-ci quality clean
 
 install:
 	$(PYTHON) -m pip install --upgrade pip
@@ -32,10 +32,19 @@ validate:
 generate-data-ci:
 	$(PYTHON) -m airline_operations_intelligence.cli generate-data --config configs/data_generation_ci.yaml --run-id ci-quality --overwrite
 
+validate-data-ci: generate-data-ci
+	$(PYTHON) -m airline_operations_intelligence.cli validate-data --source-run-dir data/raw/ci-quality --config configs/validation_ci.yaml --validation-run-id ci-quality --overwrite
+
 test-data-generation:
 	$(PYTHON) -m pytest tests/integration/test_data_generation.py
 
-quality: lint typecheck test docs-check yaml-check validate generate-data-ci
+test-ingestion-validation:
+	$(PYTHON) -m pytest tests/unit/test_validation_config.py tests/unit/test_ingestion_validation.py tests/integration/test_validation_pipeline.py
+
+describe-validation-ci:
+	$(PYTHON) -m airline_operations_intelligence.cli describe-validation --report-dir reports/validation/ci-quality
+
+quality: lint typecheck test docs-check yaml-check validate generate-data-ci validate-data-ci
 
 clean:
-	rm -rf .mypy_cache .pytest_cache .ruff_cache build dist *.egg-info data/raw/ci-quality data/raw/.ci-quality.tmp
+	rm -rf .mypy_cache .pytest_cache .ruff_cache build dist *.egg-info data/raw/ci-quality data/raw/.ci-quality.tmp data/interim/ci-quality data/interim/.ci-quality.tmp data/processed/ci-quality data/processed/.ci-quality.tmp reports/validation/ci-quality reports/validation/.ci-quality.tmp

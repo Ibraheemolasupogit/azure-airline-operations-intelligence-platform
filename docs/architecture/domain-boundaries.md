@@ -6,18 +6,18 @@ import arbitrary internal modules from each other.
 
 ## Data Generation
 
-Will create deterministic synthetic aviation datasets with no real passengers, employees,
+Creates deterministic synthetic aviation datasets with no real passengers, employees,
 aircraft defects, or confidential operations.
 
 ## Ingestion
 
-Will read synthetic source files or event messages and land raw records while preserving source
-metadata and lineage. The production mapping is Azure Event Hubs and ADLS Gen2.
+Reads completed synthetic source runs, verifies generation manifests, parses source records, and
+preserves source metadata and lineage. The production mapping is Azure Event Hubs and ADLS Gen2.
 
 ## Validation
 
-Will enforce schema, completeness, range, referential-integrity, timeliness, and sensitivity
-controls before records become curated operational datasets.
+Enforces schema, primary-key, range, timestamp, referential-integrity, and synthetic business rules
+before records become curated operational datasets.
 
 ## Passenger Forecasting
 

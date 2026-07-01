@@ -23,5 +23,11 @@ Generated records in all zones are ignored by git except `.gitkeep` placeholders
 raw run also includes `generation-manifest.json`, `data-dictionary.json`, and
 `generation-summary.md`.
 
+Milestone 3 validates raw runs into `data/processed/<validation_run_id>/` and writes quarantine
+records under `data/interim/<validation_run_id>/quarantine/`. Validation evidence is written under
+`reports/validation/<validation_run_id>/`.
+
 See [synthetic data architecture](synthetic-data-architecture.md) for generation design,
 relationships, deterministic behaviour, and Azure mapping.
+See [ingestion validation architecture](ingestion-validation-architecture.md) for governed
+validation flow, quarantine, metrics, and lineage.

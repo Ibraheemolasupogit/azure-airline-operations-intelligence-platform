@@ -2,10 +2,10 @@
 
 This repository is a local-first airline operations intelligence platform mapped to Microsoft
 Azure services. The current implementation includes the repository foundation and governed
-synthetic aviation data generation.
+synthetic aviation data generation, ingestion, and validation.
 
-No ingestion pipelines, machine-learning models, GenAI assistants, dashboards, Azure
-infrastructure, or deployment workflows are implemented yet.
+No machine-learning models, GenAI assistants, dashboards, Azure infrastructure, deployment
+workflows, or later-milestone monitoring functionality are implemented yet.
 
 ## Business Problem
 
@@ -104,6 +104,21 @@ python3 -m airline_operations_intelligence.cli describe-generation \
   --run-dir data/raw/<run_id>
 ```
 
+Validate a completed generation run:
+
+```bash
+python3 -m airline_operations_intelligence.cli validate-data \
+  --source-run-dir data/raw/<run_id> \
+  --config configs/validation.yaml
+```
+
+Describe a completed validation run:
+
+```bash
+python3 -m airline_operations_intelligence.cli describe-validation \
+  --report-dir reports/validation/<validation_run_id>
+```
+
 ## Quality Commands
 
 ```bash
@@ -115,14 +130,15 @@ make docs-check  # Markdown checks
 make yaml-check  # YAML checks
 make validate    # Repository validation CLI
 make generate-data-ci  # CI-sized deterministic synthetic data run
+make validate-data-ci  # CI-sized governed validation run
 make quality     # Full local gate
 ```
 
 ## Roadmap
 
-Milestone 1 established the repository foundation. Milestone 2 adds governed synthetic data
-generation. Later milestones add ingestion, validation, analytics, ML, monitoring, GenAI, Power BI
-outputs, and Azure deployment architecture.
+Milestone 1 established the repository foundation. Milestone 2 added governed synthetic data
+generation. Milestone 3 adds governed local ingestion and validation. Later milestones add
+analytics, ML, monitoring, GenAI, Power BI outputs, and Azure deployment architecture.
 
 See [roadmap](docs/milestones/roadmap.md).
 

@@ -1,8 +1,8 @@
 # Target Architecture
 
 The target state is a local-first implementation with clean deployment boundaries for Azure.
-Local folders, producers, configuration, and interfaces represent Azure services until later
-milestones introduce runnable components.
+Local folders, producers, configuration, ingestion, and validation interfaces represent Azure
+services until later milestones introduce cloud deployments.
 
 ```mermaid
 flowchart TB
@@ -16,9 +16,10 @@ flowchart TB
     Airport["airport_events.jsonl"]
   end
 
-  subgraph Ingestion["Local producers / Azure Event Hubs mapping"]
+  subgraph Ingestion["Local producers and validation / Azure mapping"]
     BatchProducer["Batch file producers"]
     EventProducer["Operational event producers"]
+    Validator["Governed validation CLI"]
     EventHub["Azure Event Hubs boundary"]
   end
 
@@ -82,7 +83,7 @@ flowchart TB
   Airport --> EventProducer
   BatchProducer --> Raw
   EventProducer --> EventHub --> Raw
-  Raw --> Schema --> Interim
+  Raw --> Validator --> Schema --> Interim
   Interim --> Completeness --> Freshness --> Lineage --> Processed
   Processed --> FlightOps
   Processed --> RouteDemand

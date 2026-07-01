@@ -22,8 +22,9 @@ make quality
 
 ## Milestone Discipline
 
-Milestone 2 adds synthetic data generation only. Do not add ingestion jobs, validation pipelines,
-training code, dashboards, Azure deployment templates, or GenAI runtime features until their
-roadmap milestone is active.
+Milestone 3 adds governed local ingestion and validation only. Do not add passenger forecasting,
+flight-delay prediction, maintenance models, disruption scoring, optimisation, dashboards, Azure
+deployment templates, or GenAI runtime features until their roadmap milestone is active.
 
-Generated runs under `data/raw/` are local artefacts and must not be committed.
+Generated runs under `data/raw/`, `data/interim/`, `data/processed/`, and `reports/validation/`
+are local artefacts and must not be committed.

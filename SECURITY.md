@@ -2,9 +2,9 @@
 
 ## Current Scope
 
-This repository currently contains a local Milestone 1 foundation. It does not contain real
-airline data, personal data, credentials, deployed Azure resources, models, or generated
-operational outputs.
+This repository currently contains local synthetic data generation plus governed local ingestion
+and validation. It does not contain real airline data, personal data, credentials, deployed Azure
+resources, models, or committed generated operational outputs.
 
 ## Reporting Security Issues
 

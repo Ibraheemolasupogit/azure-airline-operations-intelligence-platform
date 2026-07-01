@@ -29,6 +29,12 @@ data/interim/*
 data/processed/*
 outputs/*
 reports/*
+reports/validation/*
+*.log
+data/raw/.*.tmp/
+data/interim/.*.tmp/
+data/processed/.*.tmp/
+reports/validation/.*.tmp/
 models/
 mlruns/
 !data/raw/.gitkeep

@@ -1,4 +1,4 @@
-"""Command-line tools for repository validation and synthetic data generation."""
+"""Command-line tools for repository, generation, and validation workflows."""
 
 from __future__ import annotations
 
@@ -20,6 +20,15 @@ from airline_operations_intelligence.data_generation.config import (
 )
 from airline_operations_intelligence.data_generation.manifest import describe_manifest
 from airline_operations_intelligence.data_generation.orchestrator import generate_data
+from airline_operations_intelligence.validation.config import (
+    DEFAULT_VALIDATION_CONFIG_PATH,
+    load_validation_config,
+)
+from airline_operations_intelligence.validation.config import (
+    with_overrides as with_validation_overrides,
+)
+from airline_operations_intelligence.validation.pipeline import validate_data
+from airline_operations_intelligence.validation.reporting import describe_validation_manifest
 
 LOGGER = get_logger(__name__)
 
@@ -54,6 +63,8 @@ REQUIRED_FILES = (
     "configs/platform.yaml",
     "configs/data_generation.yaml",
     "configs/data_generation_ci.yaml",
+    "configs/validation.yaml",
+    "configs/validation_ci.yaml",
 )
 
 
@@ -158,6 +169,73 @@ def build_parser() -> argparse.ArgumentParser:
         required=True,
         help="Completed generation run directory containing generation-manifest.json.",
     )
+
+    validate_data_parser = subparsers.add_parser(
+        "validate-data",
+        help="Validate a completed Milestone 2 generation run into governed Milestone 3 outputs.",
+    )
+    validate_data_parser.add_argument(
+        "--source-run-dir",
+        type=Path,
+        required=True,
+        help="Completed source generation run directory under data/raw.",
+    )
+    validate_data_parser.add_argument(
+        "--config",
+        type=Path,
+        default=DEFAULT_VALIDATION_CONFIG_PATH,
+        help="Validation YAML configuration path.",
+    )
+    validate_data_parser.add_argument(
+        "--validation-run-id",
+        type=str,
+        default=None,
+        help="Explicit filesystem-safe validation run ID.",
+    )
+    validate_data_parser.add_argument(
+        "--interim-root",
+        type=Path,
+        default=None,
+        help="Override the configured interim output root. Must remain under data/interim.",
+    )
+    validate_data_parser.add_argument(
+        "--processed-root",
+        type=Path,
+        default=None,
+        help="Override the configured processed output root. Must remain under data/processed.",
+    )
+    validate_data_parser.add_argument(
+        "--report-root",
+        type=Path,
+        default=None,
+        help="Override the configured report root. Must remain under reports/validation.",
+    )
+    validate_data_parser.add_argument(
+        "--overwrite",
+        action="store_true",
+        help="Replace existing validation outputs for the same validation run ID.",
+    )
+    validate_data_parser.add_argument(
+        "--fail-on-warning",
+        action="store_true",
+        help="Fail the validation run when warnings exceed the configured threshold.",
+    )
+    validate_data_parser.add_argument(
+        "--no-quarantine",
+        action="store_true",
+        help="Disable quarantine output writing.",
+    )
+
+    describe_validation_parser = subparsers.add_parser(
+        "describe-validation",
+        help="Describe a completed governed validation run from its validation manifest.",
+    )
+    describe_validation_parser.add_argument(
+        "--report-dir",
+        type=Path,
+        required=True,
+        help="Completed validation report directory containing validation-manifest.json.",
+    )
     return parser
 
 
@@ -179,25 +257,74 @@ def main(argv: Sequence[str] | None = None) -> int:
 
     if args.command == "generate-data":
         try:
-            config = load_generation_config(args.config)
-            config = with_overrides(
-                config,
+            generation_config = load_generation_config(args.config)
+            generation_config = with_overrides(
+                generation_config,
                 seed=args.seed,
                 output_root=args.output_root,
                 overwrite=True if args.overwrite else None,
             )
-            result = generate_data(config, run_id=args.run_id)
+            generation_result = generate_data(generation_config, run_id=args.run_id)
         except AirlineOperationsError as exc:
             LOGGER.error("%s", exc)
             return 1
-        LOGGER.info("Generated synthetic aviation data run %s at %s", result.run_id, result.run_dir)
-        for filename, row_count in result.row_counts.items():
+        LOGGER.info(
+            "Generated synthetic aviation data run %s at %s",
+            generation_result.run_id,
+            generation_result.run_dir,
+        )
+        for filename, row_count in generation_result.row_counts.items():
             LOGGER.info("%s: %s rows", filename, row_count)
         return 0
 
     if args.command == "describe-generation":
         try:
             description = describe_manifest(args.run_dir)
+        except AirlineOperationsError as exc:
+            LOGGER.error("%s", exc)
+            return 1
+        print(description)
+        return 0
+
+    if args.command == "validate-data":
+        try:
+            validation_config = load_validation_config(args.config)
+            validation_config = with_validation_overrides(
+                validation_config,
+                interim_root=args.interim_root,
+                processed_root=args.processed_root,
+                report_root=args.report_root,
+                overwrite=True if args.overwrite else None,
+                fail_on_warning=True if args.fail_on_warning else None,
+                quarantine_invalid_records=False if args.no_quarantine else None,
+            )
+            validation_result = validate_data(
+                source_run_dir=args.source_run_dir,
+                config=validation_config,
+                validation_run_id=args.validation_run_id,
+            )
+        except AirlineOperationsError as exc:
+            LOGGER.error("%s", exc)
+            return 1
+        LOGGER.info(
+            "Validated source run %s as %s",
+            validation_result.source_run_id,
+            validation_result.validation_run_id,
+        )
+        LOGGER.info("Overall status: %s", validation_result.overall_status)
+        for filename, counts in validation_result.row_counts.items():
+            LOGGER.info(
+                "%s: source=%s valid=%s quarantined=%s",
+                filename,
+                counts["source"],
+                counts["valid"],
+                counts["quarantined"],
+            )
+        return 0 if validation_result.overall_status == "passed" else 1
+
+    if args.command == "describe-validation":
+        try:
+            description = describe_validation_manifest(args.report_dir)
         except AirlineOperationsError as exc:
             LOGGER.error("%s", exc)
             return 1

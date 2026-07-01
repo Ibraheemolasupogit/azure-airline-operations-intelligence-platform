@@ -1,0 +1,58 @@
+validation:
+  profile: development
+  fail_on_error: true
+  fail_on_warning: false
+  quarantine_invalid_records: true
+  allow_empty_datasets: false
+  verify_source_checksums: true
+  verify_manifest_row_counts: true
+  strict_schema: true
+  unknown_column_policy: reject
+  missing_column_policy: reject
+  duplicate_policy: quarantine
+  output_interim_root: data/interim
+  output_processed_root: data/processed
+  report_root: reports/validation
+  overwrite: false
+  enabled_rule_groups:
+    - manifest
+    - schema
+    - primary_key
+    - business
+    - relationships
+  severity_thresholds:
+    max_error_count: 0
+    max_fatal_count: 0
+    max_warning_count: 1000
+  accepted_timestamp_formats:
+    - iso8601_utc
+  nullable_fields:
+    delay_history.csv:
+      - actual_departure_utc
+      - actual_arrival_utc
+      - arrival_delay_minutes
+      - taxi_out_minutes
+      - taxi_in_minutes
+      - airborne_minutes
+      - secondary_delay_cause
+      - diversion_airport
+    aircraft_health.jsonl:
+      - fault_code
+    crew_operations.csv:
+      - crew_disruption_reason
+  ranges:
+    score_min: 0
+    score_max: 100
+    probability_min: 0
+    probability_max: 1
+    early_departure_allowance_minutes: 15
+    controlled_overbooking_tolerance: 1.08
+    timestamp_overlap_tolerance_minutes: 30
+    max_invalid_record_rate: 0.05
+    warning_invalid_record_rate: 0.01
+    booking_velocity_max: 20
+    temperature_min_c: -60
+    temperature_max_c: 55
+  output:
+    write_empty_quarantine_files: true
+    json_indent: 2
