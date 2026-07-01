@@ -39,3 +39,6 @@ jobs:
 
       - name: Validate repository
         run: make validate
+
+      - name: Generate CI synthetic data
+        run: make generate-data-ci

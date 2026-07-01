@@ -22,6 +22,8 @@ make quality
 
 ## Milestone Discipline
 
-Milestone 1 only establishes the repository foundation and architecture baseline. Do not add
-synthetic data, ingestion jobs, training code, dashboards, Azure deployment templates, or GenAI
-runtime features until their roadmap milestone is active.
+Milestone 2 adds synthetic data generation only. Do not add ingestion jobs, validation pipelines,
+training code, dashboards, Azure deployment templates, or GenAI runtime features until their
+roadmap milestone is active.
+
+Generated runs under `data/raw/` are local artefacts and must not be committed.

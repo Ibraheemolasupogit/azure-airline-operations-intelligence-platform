@@ -1,6 +1,6 @@
 PYTHON ?= python3
 
-.PHONY: install format lint typecheck test docs-check yaml-check validate quality clean
+.PHONY: install format lint typecheck test docs-check yaml-check validate generate-data-ci test-data-generation quality clean
 
 install:
 	$(PYTHON) -m pip install --upgrade pip
@@ -29,7 +29,13 @@ yaml-check:
 validate:
 	$(PYTHON) -m airline_operations_intelligence.cli validate-repository
 
-quality: lint typecheck test docs-check yaml-check validate
+generate-data-ci:
+	$(PYTHON) -m airline_operations_intelligence.cli generate-data --config configs/data_generation_ci.yaml --run-id ci-quality --overwrite
+
+test-data-generation:
+	$(PYTHON) -m pytest tests/integration/test_data_generation.py
+
+quality: lint typecheck test docs-check yaml-check validate generate-data-ci
 
 clean:
-	rm -rf .mypy_cache .pytest_cache .ruff_cache build dist *.egg-info
+	rm -rf .mypy_cache .pytest_cache .ruff_cache build dist *.egg-info data/raw/ci-quality data/raw/.ci-quality.tmp

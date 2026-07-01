@@ -1,0 +1,195 @@
+generation:
+  profile: development
+  seed: 42
+  start_date: "2025-01-01"
+  number_of_days: 14
+  flights_per_day: 36
+  output_root: data/raw
+  overwrite: false
+  anomaly_rate: 0.015
+  demand_observation_days: [60, 30, 14, 7, 1]
+  max_overbooking_ratio: 1.06
+
+reference:
+  airports:
+    - code: LHR
+      name: Synthetic London Heathrow
+      region: UK
+    - code: AMS
+      name: Synthetic Amsterdam Hub
+      region: EU
+    - code: JFK
+      name: Synthetic New York Gateway
+      region: US
+    - code: DXB
+      name: Synthetic Dubai Hub
+      region: ME
+    - code: MAD
+      name: Synthetic Madrid Hub
+      region: EU
+    - code: MAN
+      name: Synthetic Manchester Airport
+      region: UK
+  routes:
+    - route_id: LHR-AMS
+      origin: LHR
+      destination: AMS
+      scheduled_block_minutes: 80
+      popularity: 1.25
+      service_type: scheduled
+    - route_id: AMS-LHR
+      origin: AMS
+      destination: LHR
+      scheduled_block_minutes: 85
+      popularity: 1.2
+      service_type: scheduled
+    - route_id: LHR-JFK
+      origin: LHR
+      destination: JFK
+      scheduled_block_minutes: 470
+      popularity: 1.35
+      service_type: scheduled
+    - route_id: JFK-LHR
+      origin: JFK
+      destination: LHR
+      scheduled_block_minutes: 420
+      popularity: 1.3
+      service_type: scheduled
+    - route_id: LHR-DXB
+      origin: LHR
+      destination: DXB
+      scheduled_block_minutes: 430
+      popularity: 1.15
+      service_type: scheduled
+    - route_id: DXB-LHR
+      origin: DXB
+      destination: LHR
+      scheduled_block_minutes: 455
+      popularity: 1.1
+      service_type: scheduled
+    - route_id: LHR-MAD
+      origin: LHR
+      destination: MAD
+      scheduled_block_minutes: 145
+      popularity: 1.05
+      service_type: scheduled
+    - route_id: MAD-LHR
+      origin: MAD
+      destination: LHR
+      scheduled_block_minutes: 150
+      popularity: 1.0
+      service_type: scheduled
+    - route_id: MAN-AMS
+      origin: MAN
+      destination: AMS
+      scheduled_block_minutes: 90
+      popularity: 0.85
+      service_type: scheduled
+    - route_id: AMS-MAN
+      origin: AMS
+      destination: MAN
+      scheduled_block_minutes: 95
+      popularity: 0.82
+      service_type: scheduled
+  aircraft_types:
+    A320:
+      seat_capacity: 180
+    A321:
+      seat_capacity: 220
+    B737-800:
+      seat_capacity: 189
+    B787-9:
+      seat_capacity: 290
+    E190:
+      seat_capacity: 100
+  fleet:
+    - aircraft_id: SYN-A320-001
+      aircraft_type: A320
+      base_airport: LHR
+    - aircraft_id: SYN-A320-002
+      aircraft_type: A320
+      base_airport: AMS
+    - aircraft_id: SYN-A321-001
+      aircraft_type: A321
+      base_airport: LHR
+    - aircraft_id: SYN-B738-001
+      aircraft_type: B737-800
+      base_airport: MAN
+    - aircraft_id: SYN-B789-001
+      aircraft_type: B787-9
+      base_airport: LHR
+    - aircraft_id: SYN-E190-001
+      aircraft_type: E190
+      base_airport: AMS
+  carriers: [AO]
+  crew_bases: [LHR, AMS, MAN]
+  weather_event_probabilities:
+    clear_wind: 0.04
+    rain: 0.12
+    thunderstorm: 0.025
+    fog: 0.035
+    snow: 0.015
+  airport_event_probabilities:
+    runway_restriction: 0.025
+    terminal_congestion: 0.04
+    ground_handling_shortage: 0.025
+    air_traffic_flow_restriction: 0.02
+    security_incident_simulation: 0.005
+    equipment_outage: 0.015
+    deicing_constraint: 0.015
+    baggage_system_disruption: 0.02
+  demand_seasonality:
+    "01": 0.92
+    "02": 0.94
+    "03": 1.0
+    "04": 1.04
+    "05": 1.08
+    "06": 1.12
+    "07": 1.18
+    "08": 1.16
+    "09": 1.05
+    "10": 1.02
+    "11": 0.96
+    "12": 1.14
+  delay_cause_probabilities:
+    weather: 0.2
+    airport: 0.18
+    crew: 0.14
+    aircraft: 0.12
+    reactionary: 0.2
+    airline_operations: 0.16
+  sensor_ranges:
+    A320: &narrowbody_sensors
+      engine_1_vibration: [0.2, 4.8]
+      engine_2_vibration: [0.2, 4.8]
+      engine_1_temperature_c: [540, 760]
+      engine_2_temperature_c: [540, 760]
+      hydraulic_pressure_psi: [2850, 3200]
+      oil_pressure_psi: [42, 75]
+      fuel_flow_kg_h: [1700, 2900]
+      brake_temperature_c: [80, 380]
+    A321: *narrowbody_sensors
+    B737-800: *narrowbody_sensors
+    B787-9:
+      engine_1_vibration: [0.2, 5.2]
+      engine_2_vibration: [0.2, 5.2]
+      engine_1_temperature_c: [580, 820]
+      engine_2_temperature_c: [580, 820]
+      hydraulic_pressure_psi: [2900, 3300]
+      oil_pressure_psi: [45, 82]
+      fuel_flow_kg_h: [4200, 6900]
+      brake_temperature_c: [90, 420]
+    E190:
+      engine_1_vibration: [0.2, 4.2]
+      engine_2_vibration: [0.2, 4.2]
+      engine_1_temperature_c: [500, 710]
+      engine_2_temperature_c: [500, 710]
+      hydraulic_pressure_psi: [2700, 3150]
+      oil_pressure_psi: [38, 70]
+      fuel_flow_kg_h: [1100, 2200]
+      brake_temperature_c: [70, 330]
+  maintenance_risk:
+    vibration_weight: 1.0
+    temperature_weight: 0.7
+    pressure_weight: 1.1
+    utilisation_weight: 0.8

@@ -1,7 +1,7 @@
 # Data Architecture
 
-No datasets are created in Milestone 1. Future datasets will be synthetic and must not represent
-real passengers, employees, aircraft defects, or confidential airline operations.
+Milestone 2 generates synthetic source datasets under `data/raw/<run_id>/`. The datasets must not
+represent real passengers, employees, aircraft defects, or confidential airline operations.
 
 | Source | Purpose | Grain | Representative fields | Relationships | Classification | Validation controls | Consumers |
 | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -19,4 +19,9 @@ real passengers, employees, aircraft defects, or confidential airline operations
 - `data/interim`: validated but not final transformation outputs.
 - `data/processed`: curated operational datasets ready for analytics.
 
-Generated records in all zones are ignored by git except `.gitkeep` placeholders.
+Generated records in all zones are ignored by git except `.gitkeep` placeholders. Each synthetic
+raw run also includes `generation-manifest.json`, `data-dictionary.json`, and
+`generation-summary.md`.
+
+See [synthetic data architecture](synthetic-data-architecture.md) for generation design,
+relationships, deterministic behaviour, and Azure mapping.

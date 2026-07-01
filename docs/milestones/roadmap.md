@@ -3,7 +3,7 @@
 | Milestone | Objective | Principal deliverables | Acceptance criteria | Dependencies |
 | --- | --- | --- | --- | --- |
 | 1 - Repository foundation and architecture baseline | Establish structure, docs, config, tests, quality tooling, and CI | Package layout, validation CLI, architecture docs, governance docs | Full local quality gate passes; no later functionality implemented | None |
-| 2 - Synthetic aviation data generation | Produce deterministic synthetic source data | Data generator contracts, synthetic files, data dictionary | Generated data is reproducible and clearly synthetic | 1 |
+| 2 - Synthetic aviation data generation | Produce deterministic synthetic source data | YAML profiles, generator domains, synthetic files, manifest, data dictionary, summary | Generated data is reproducible, relationally coherent, checksummed, and clearly synthetic | 1 |
 | 3 - Governed ingestion and validation | Land and validate synthetic data | Ingestion interfaces, validation rules, quality reports | Invalid records are rejected and lineage is captured | 2 |
 | 4 - Passenger-demand forecasting | Forecast route-period demand | Baselines, forecasting models, evaluation artefacts | Chronological validation demonstrates performance against baselines | 3 |
 | 5 - Flight-delay prediction | Estimate delay risk | Delay features, baseline and tree models, risk outputs | Leakage checks and operational metrics pass | 3 |

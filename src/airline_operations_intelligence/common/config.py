@@ -61,13 +61,8 @@ def _parse_config(raw: dict[str, Any]) -> PlatformConfig:
         raise ConfigurationError("runtime.random_seed must be an integer.")
 
     parsed_paths = {key: Path(_require_str(paths, key)) for key in paths}
-    parsed_mapping = {
-        key: _expect_str(value, f"azure_service_mapping.{key}")
-        for key, value in service_mapping.items()
-    }
-    parsed_governance = {
-        key: _expect_bool(value, f"governance.{key}") for key, value in governance.items()
-    }
+    parsed_mapping = {key: _expect_str(value, f"azure_service_mapping.{key}") for key, value in service_mapping.items()}
+    parsed_governance = {key: _expect_bool(value, f"governance.{key}") for key, value in governance.items()}
 
     _validate_governance(parsed_governance)
 

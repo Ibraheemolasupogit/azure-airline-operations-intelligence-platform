@@ -1,12 +1,11 @@
 # Azure Airline Operations Intelligence Platform
 
-This repository is the Milestone 1 foundation for a local-first airline operations
-intelligence platform mapped to Microsoft Azure services. It establishes the business
-scenario, architecture, governance principles, Python package boundaries, quality gate,
-and developer workflow.
+This repository is a local-first airline operations intelligence platform mapped to Microsoft
+Azure services. The current implementation includes the repository foundation and governed
+synthetic aviation data generation.
 
-No synthetic datasets, ingestion pipelines, machine-learning models, GenAI assistants,
-dashboards, or Azure deployments are implemented in this milestone.
+No ingestion pipelines, machine-learning models, GenAI assistants, dashboards, Azure
+infrastructure, or deployment workflows are implemented yet.
 
 ## Business Problem
 
@@ -91,6 +90,20 @@ Validate the repository foundation:
 python3 -m airline_operations_intelligence.cli validate-repository
 ```
 
+Generate a synthetic development run:
+
+```bash
+python3 -m airline_operations_intelligence.cli generate-data \
+  --config configs/data_generation.yaml
+```
+
+Describe a completed run:
+
+```bash
+python3 -m airline_operations_intelligence.cli describe-generation \
+  --run-dir data/raw/<run_id>
+```
+
 ## Quality Commands
 
 ```bash
@@ -101,15 +114,15 @@ make test        # pytest
 make docs-check  # Markdown checks
 make yaml-check  # YAML checks
 make validate    # Repository validation CLI
+make generate-data-ci  # CI-sized deterministic synthetic data run
 make quality     # Full local gate
 ```
 
 ## Roadmap
 
-Milestone 1 is complete when the repository foundation, architecture documentation, package
-layout, configuration, tests, quality tooling, and CI are in place. Later milestones add data
-generation, ingestion, analytics, ML, monitoring, GenAI, Power BI outputs, and Azure deployment
-architecture.
+Milestone 1 established the repository foundation. Milestone 2 adds governed synthetic data
+generation. Later milestones add ingestion, validation, analytics, ML, monitoring, GenAI, Power BI
+outputs, and Azure deployment architecture.
 
 See [roadmap](docs/milestones/roadmap.md).
 
