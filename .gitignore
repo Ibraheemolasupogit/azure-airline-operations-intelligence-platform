@@ -30,11 +30,17 @@ data/processed/*
 outputs/*
 reports/*
 reports/validation/*
+reports/passenger_forecasting/*
+outputs/passenger_forecasting/*
+outputs/models/passenger_forecasting/*
 *.log
 data/raw/.*.tmp/
 data/interim/.*.tmp/
 data/processed/.*.tmp/
 reports/validation/.*.tmp/
+reports/passenger_forecasting/.*.tmp/
+outputs/passenger_forecasting/.*.tmp/
+outputs/models/passenger_forecasting/.*.tmp/
 models/
 mlruns/
 !data/raw/.gitkeep

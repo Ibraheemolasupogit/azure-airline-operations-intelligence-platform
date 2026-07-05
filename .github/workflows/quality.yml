@@ -46,5 +46,8 @@ jobs:
       - name: Validate CI synthetic data
         run: make validate-data-ci
 
+      - name: Forecast CI passenger demand
+        run: make forecast-passenger-demand-ci
+
       - name: Clean generated CI artefacts
         run: make clean

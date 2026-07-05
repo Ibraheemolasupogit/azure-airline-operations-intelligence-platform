@@ -59,3 +59,47 @@ class ValidationThresholdError(AirlineOperationsError):
 
 class ValidationOutputCollisionError(AirlineOperationsError):
     """Raised when validation output directories already exist."""
+
+
+class ForecastingConfigurationError(AirlineOperationsError):
+    """Raised when passenger forecasting configuration is invalid."""
+
+
+class ForecastingSourceError(AirlineOperationsError):
+    """Raised when a validation source cannot be used for forecasting."""
+
+
+class ForecastingIntegrityError(ForecastingSourceError):
+    """Raised when forecasting input checksums or manifests do not verify."""
+
+
+class FeatureEngineeringError(AirlineOperationsError):
+    """Raised when forecasting features cannot be constructed safely."""
+
+
+class LeakageDetectedError(FeatureEngineeringError):
+    """Raised when a feature would leak target or future information."""
+
+
+class InsufficientTrainingDataError(AirlineOperationsError):
+    """Raised when chronological partitions cannot support training."""
+
+
+class ForecastTrainingError(AirlineOperationsError):
+    """Raised when a forecasting model cannot be trained."""
+
+
+class ForecastEvaluationError(AirlineOperationsError):
+    """Raised when forecast evaluation fails."""
+
+
+class ModelSelectionError(AirlineOperationsError):
+    """Raised when a champion model cannot be selected."""
+
+
+class ForecastOutputCollisionError(AirlineOperationsError):
+    """Raised when forecasting output directories already exist."""
+
+
+class ForecastArtefactError(AirlineOperationsError):
+    """Raised when forecast artefacts cannot be written or verified."""

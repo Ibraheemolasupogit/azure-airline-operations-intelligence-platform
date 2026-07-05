@@ -44,7 +44,7 @@ flowchart TB
   end
 
   subgraph Analytics["Forecasting, prediction, anomaly and disruption services"]
-    Forecasting["Passenger forecasting"]
+    Forecasting["Passenger forecasting<br/>(Milestone 4 local)"]
     DelayPrediction["Delay prediction"]
     Maintenance["Maintenance risk"]
     Anomaly["Anomaly detection"]

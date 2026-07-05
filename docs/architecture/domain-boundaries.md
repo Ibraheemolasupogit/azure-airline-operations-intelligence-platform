@@ -21,8 +21,9 @@ before records become curated operational datasets.
 
 ## Passenger Forecasting
 
-Will forecast demand by route and departure period using time-aware splits, reproducible seeds,
-baselines, feature lineage, and operationally meaningful metrics.
+Forecasts final synthetic passenger demand by flight at a configured booking horizon using
+validated data, leakage-safe features, chronological splits, baselines, model evidence, and
+operationally meaningful metrics.
 
 ## Delay Prediction
 

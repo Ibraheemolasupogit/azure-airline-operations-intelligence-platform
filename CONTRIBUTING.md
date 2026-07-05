@@ -22,9 +22,10 @@ make quality
 
 ## Milestone Discipline
 
-Milestone 3 adds governed local ingestion and validation only. Do not add passenger forecasting,
-flight-delay prediction, maintenance models, disruption scoring, optimisation, dashboards, Azure
-deployment templates, or GenAI runtime features until their roadmap milestone is active.
+Milestone 4 adds passenger-demand forecasting only. Do not add flight-delay prediction,
+maintenance models, disruption scoring, optimisation, dashboards, Azure deployment templates,
+production monitoring, or GenAI runtime features until their roadmap milestone is active.
 
 Generated runs under `data/raw/`, `data/interim/`, `data/processed/`, and `reports/validation/`
-are local artefacts and must not be committed.
+plus passenger forecasting outputs under `outputs/` and `reports/passenger_forecasting/` are local
+artefacts and must not be committed.

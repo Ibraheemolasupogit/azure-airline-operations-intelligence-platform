@@ -3,8 +3,8 @@
 ## Current Scope
 
 This repository currently contains local synthetic data generation plus governed local ingestion
-and validation. It does not contain real airline data, personal data, credentials, deployed Azure
-resources, models, or committed generated operational outputs.
+and validation plus local passenger-demand forecasting. It does not contain real airline data,
+personal data, credentials, deployed Azure resources, or committed generated operational outputs.
 
 ## Reporting Security Issues
 
@@ -23,4 +23,5 @@ threads. Include the affected files, expected impact, and reproduction steps whe
 
 The platform is an analytics and decision-support demonstration. It is not an airworthiness
 system, flight-control system, safety-management system, or certified aviation operational
-system.
+system. Passenger-demand forecasts are synthetic evaluation artefacts and are not production
+revenue-management or pricing models.

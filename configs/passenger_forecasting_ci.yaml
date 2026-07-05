@@ -1,0 +1,57 @@
+forecasting:
+  target: expected_final_passengers
+  prediction_horizon_days: 14
+  minimum_history_days: 0
+  output_root: outputs/passenger_forecasting
+  model_root: outputs/models/passenger_forecasting
+  report_root: reports/passenger_forecasting
+  overwrite: false
+  seed: 7
+  champion_selection_metric: wape
+  champion_selection_direction: minimize
+  minimum_improvement_over_baseline: 0.0
+
+data:
+  required_validation_status: [passed]
+  include_routes: []
+  exclude_routes: []
+  minimum_route_observations: 1
+  allow_controlled_overbooking: true
+
+splitting:
+  strategy: chronological
+  train_fraction: 0.60
+  validation_fraction: 0.20
+  test_fraction: 0.20
+  minimum_train_periods: 2
+  gap_days: 0
+
+features:
+  use_route: true
+  use_day_of_week: true
+  use_month: true
+  use_days_before_departure: true
+  use_booked_passengers: true
+  use_booking_velocity: true
+  use_cancellations_to_date: true
+  use_group_booking_count: true
+  use_capacity: true
+  use_demand_segment: true
+  use_fare_class_mix: true
+  use_historical_route_statistics: true
+  historical_rolling_windows: [7, 28]
+
+models:
+  seasonal_naive:
+    enabled: true
+  historical_mean:
+    enabled: true
+  linear_regression:
+    enabled: true
+
+evaluation:
+  metrics: [mae, rmse, wape, smape, bias]
+  evaluate_by_route: true
+  evaluate_by_horizon: true
+  evaluate_by_load_factor_band: true
+  prediction_interval_levels: [0.80, 0.95]

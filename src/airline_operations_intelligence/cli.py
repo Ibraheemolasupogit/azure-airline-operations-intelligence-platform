@@ -20,6 +20,15 @@ from airline_operations_intelligence.data_generation.config import (
 )
 from airline_operations_intelligence.data_generation.manifest import describe_manifest
 from airline_operations_intelligence.data_generation.orchestrator import generate_data
+from airline_operations_intelligence.forecasting.config import (
+    DEFAULT_FORECASTING_CONFIG_PATH,
+    load_forecasting_config,
+)
+from airline_operations_intelligence.forecasting.config import (
+    with_overrides as with_forecasting_overrides,
+)
+from airline_operations_intelligence.forecasting.pipeline import forecast_passenger_demand
+from airline_operations_intelligence.forecasting.reporting import describe_forecast_report
 from airline_operations_intelligence.validation.config import (
     DEFAULT_VALIDATION_CONFIG_PATH,
     load_validation_config,
@@ -65,6 +74,8 @@ REQUIRED_FILES = (
     "configs/data_generation_ci.yaml",
     "configs/validation.yaml",
     "configs/validation_ci.yaml",
+    "configs/passenger_forecasting.yaml",
+    "configs/passenger_forecasting_ci.yaml",
 )
 
 
@@ -236,6 +247,70 @@ def build_parser() -> argparse.ArgumentParser:
         required=True,
         help="Completed validation report directory containing validation-manifest.json.",
     )
+
+    forecast_parser = subparsers.add_parser(
+        "forecast-passenger-demand",
+        help="Train and evaluate deterministic passenger-demand forecasts for Milestone 4.",
+    )
+    forecast_parser.add_argument(
+        "--validation-report-dir",
+        type=Path,
+        required=True,
+        help="Completed Milestone 3 validation report directory.",
+    )
+    forecast_parser.add_argument(
+        "--config",
+        type=Path,
+        default=DEFAULT_FORECASTING_CONFIG_PATH,
+        help="Passenger forecasting YAML configuration path.",
+    )
+    forecast_parser.add_argument(
+        "--forecast-run-id",
+        type=str,
+        default=None,
+        help="Explicit filesystem-safe forecast run ID.",
+    )
+    forecast_parser.add_argument(
+        "--output-root",
+        type=Path,
+        default=None,
+        help="Override forecast output root under outputs/passenger_forecasting.",
+    )
+    forecast_parser.add_argument(
+        "--model-root",
+        type=Path,
+        default=None,
+        help="Override model output root under outputs/models/passenger_forecasting.",
+    )
+    forecast_parser.add_argument(
+        "--report-root",
+        type=Path,
+        default=None,
+        help="Override report root under reports/passenger_forecasting.",
+    )
+    forecast_parser.add_argument("--seed", type=int, default=None, help="Override deterministic model seed.")
+    forecast_parser.add_argument(
+        "--prediction-horizon-days",
+        type=int,
+        default=None,
+        help="Override configured booking horizon.",
+    )
+    forecast_parser.add_argument(
+        "--overwrite",
+        action="store_true",
+        help="Replace existing forecast/model/report outputs for the same run ID.",
+    )
+
+    describe_forecast_parser = subparsers.add_parser(
+        "describe-passenger-forecast",
+        help="Describe a completed passenger forecasting run without retraining.",
+    )
+    describe_forecast_parser.add_argument(
+        "--forecast-report-dir",
+        type=Path,
+        required=True,
+        help="Completed passenger forecasting report directory containing forecast-manifest.json.",
+    )
     return parser
 
 
@@ -325,6 +400,44 @@ def main(argv: Sequence[str] | None = None) -> int:
     if args.command == "describe-validation":
         try:
             description = describe_validation_manifest(args.report_dir)
+        except AirlineOperationsError as exc:
+            LOGGER.error("%s", exc)
+            return 1
+        print(description)
+        return 0
+
+    if args.command == "forecast-passenger-demand":
+        try:
+            forecasting_config = load_forecasting_config(args.config)
+            forecasting_config = with_forecasting_overrides(
+                forecasting_config,
+                output_root=args.output_root,
+                model_root=args.model_root,
+                report_root=args.report_root,
+                seed=args.seed,
+                prediction_horizon_days=args.prediction_horizon_days,
+                overwrite=True if args.overwrite else None,
+            )
+            forecast_result = forecast_passenger_demand(
+                validation_report_dir=args.validation_report_dir,
+                config=forecasting_config,
+                forecast_run_id=args.forecast_run_id,
+            )
+        except AirlineOperationsError as exc:
+            LOGGER.error("%s", exc)
+            return 1
+        LOGGER.info(
+            "Forecasted passenger demand for validation run %s as %s",
+            forecast_result.source_validation_run_id,
+            forecast_result.forecast_run_id,
+        )
+        LOGGER.info("Champion model: %s", forecast_result.champion_model_id)
+        LOGGER.info("Partition rows: %s", forecast_result.partition_row_counts)
+        return 0 if forecast_result.overall_status == "passed" else 1
+
+    if args.command == "describe-passenger-forecast":
+        try:
+            description = describe_forecast_report(args.forecast_report_dir)
         except AirlineOperationsError as exc:
             LOGGER.error("%s", exc)
             return 1

@@ -1,11 +1,11 @@
 # Machine-Learning Architecture
 
-Future ML work will be evidence-led. No model is assumed superior because it is complex.
-Baselines must be built, evaluated, and compared before advanced methods are adopted.
+ML work is evidence-led. No model is assumed superior because it is complex. Baselines must be
+built, evaluated, and compared before advanced methods are adopted.
 
 ## Use Cases
 
-- Passenger-demand forecasting.
+- Passenger-demand forecasting, implemented locally in Milestone 4.
 - Flight-delay prediction.
 - Aircraft-maintenance risk.
 - Anomaly detection.
@@ -15,9 +15,8 @@ Baselines must be built, evaluated, and compared before advanced methods are ado
 
 ## Candidate Model Families
 
-- Naive and seasonal baselines for forecasting and classification comparisons.
-- ARIMA or SARIMA for time-series demand patterns.
-- Prophet where calendar effects and interpretability justify its use.
+- Naive and historical baselines for forecasting and classification comparisons.
+- Lightweight supervised regressors where the modelling grain is flight-level prediction.
 - Logistic regression baselines for delay or disruption classification.
 - Random forest models for nonlinear tabular signals.
 - Gradient-boosted trees or XGBoost where tabular performance warrants extra complexity.
@@ -34,3 +33,12 @@ Baselines must be built, evaluated, and compared before advanced methods are ado
 - Model metadata, training windows, code versions, and evaluation artefacts.
 - Metrics tied to operational decisions, such as delay-risk triage quality or forecast error by
   route and departure period.
+
+## Implemented Local Forecasting
+
+- Consumes completed Milestone 3 validation runs.
+- Uses one forecast per flight at a configured booking horizon.
+- Prevents temporal leakage through feature availability policy and chronological splits.
+- Evaluates historical mean, booking-curve, and deterministic linear-regression candidates.
+- Selects a champion using validation metrics only.
+- Writes model artefacts, forecasts, metrics, lineage, and reports locally.

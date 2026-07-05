@@ -2,10 +2,11 @@
 
 This repository is a local-first airline operations intelligence platform mapped to Microsoft
 Azure services. The current implementation includes the repository foundation and governed
-synthetic aviation data generation, ingestion, and validation.
+synthetic aviation data generation, ingestion, validation, and passenger-demand forecasting.
 
-No machine-learning models, GenAI assistants, dashboards, Azure infrastructure, deployment
-workflows, or later-milestone monitoring functionality are implemented yet.
+No flight-delay prediction, aircraft-maintenance models, disruption scoring, optimisation, GenAI
+assistants, dashboards, Azure infrastructure, deployment workflows, or later-milestone monitoring
+functionality are implemented yet.
 
 ## Business Problem
 
@@ -119,6 +120,21 @@ python3 -m airline_operations_intelligence.cli describe-validation \
   --report-dir reports/validation/<validation_run_id>
 ```
 
+Run passenger-demand forecasting:
+
+```bash
+python3 -m airline_operations_intelligence.cli forecast-passenger-demand \
+  --validation-report-dir reports/validation/<validation_run_id> \
+  --config configs/passenger_forecasting.yaml
+```
+
+Describe a completed forecast:
+
+```bash
+python3 -m airline_operations_intelligence.cli describe-passenger-forecast \
+  --forecast-report-dir reports/passenger_forecasting/<forecast_run_id>
+```
+
 ## Quality Commands
 
 ```bash
@@ -131,14 +147,16 @@ make yaml-check  # YAML checks
 make validate    # Repository validation CLI
 make generate-data-ci  # CI-sized deterministic synthetic data run
 make validate-data-ci  # CI-sized governed validation run
+make forecast-passenger-demand-ci  # CI-sized passenger forecasting run
 make quality     # Full local gate
 ```
 
 ## Roadmap
 
 Milestone 1 established the repository foundation. Milestone 2 added governed synthetic data
-generation. Milestone 3 adds governed local ingestion and validation. Later milestones add
-analytics, ML, monitoring, GenAI, Power BI outputs, and Azure deployment architecture.
+generation. Milestone 3 added governed local ingestion and validation. Milestone 4 adds
+passenger-demand forecasting. Later milestones add delay prediction, maintenance analytics,
+disruption scoring, monitoring, GenAI, Power BI outputs, and Azure deployment architecture.
 
 See [roadmap](docs/milestones/roadmap.md).
 
