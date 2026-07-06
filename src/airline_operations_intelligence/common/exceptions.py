@@ -103,3 +103,55 @@ class ForecastOutputCollisionError(AirlineOperationsError):
 
 class ForecastArtefactError(AirlineOperationsError):
     """Raised when forecast artefacts cannot be written or verified."""
+
+
+class DelayPredictionConfigurationError(AirlineOperationsError):
+    """Raised when flight-delay prediction configuration is invalid."""
+
+
+class DelayPredictionSourceError(AirlineOperationsError):
+    """Raised when delay prediction input sources cannot be used."""
+
+
+class DelayPredictionIntegrityError(DelayPredictionSourceError):
+    """Raised when delay prediction input manifests or checksums do not verify."""
+
+
+class DelayFeatureEngineeringError(AirlineOperationsError):
+    """Raised when delay prediction features cannot be built safely."""
+
+
+class DelayLeakageDetectedError(DelayFeatureEngineeringError):
+    """Raised when delay prediction features leak target or future information."""
+
+
+class DelayInsufficientDataError(AirlineOperationsError):
+    """Raised when delay prediction partitions do not contain enough rows."""
+
+
+class DelayClassDistributionError(DelayInsufficientDataError):
+    """Raised when delay prediction target classes are not trainable."""
+
+
+class DelayTrainingError(AirlineOperationsError):
+    """Raised when a delay prediction model cannot be trained."""
+
+
+class DelayEvaluationError(AirlineOperationsError):
+    """Raised when delay prediction evaluation cannot run."""
+
+
+class DelayThresholdSelectionError(AirlineOperationsError):
+    """Raised when a delay prediction threshold cannot be selected."""
+
+
+class DelayModelSelectionError(AirlineOperationsError):
+    """Raised when a delay prediction champion cannot be selected."""
+
+
+class DelayOutputCollisionError(AirlineOperationsError):
+    """Raised when delay prediction output directories already exist."""
+
+
+class DelayArtefactError(AirlineOperationsError):
+    """Raised when delay prediction artefacts cannot be written or verified."""

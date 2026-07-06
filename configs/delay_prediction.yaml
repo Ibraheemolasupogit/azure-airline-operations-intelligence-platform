@@ -1,0 +1,87 @@
+delay_prediction:
+  target: departure_delay_15_flag
+  delay_threshold_minutes: 15
+  prediction_cutoff_minutes: 120
+  output_root: outputs/delay_prediction
+  model_root: outputs/models/delay_prediction
+  report_root: reports/delay_prediction
+  overwrite: false
+  seed: 42
+  champion_selection_metric: pr_auc
+  champion_selection_direction: maximize
+  minimum_improvement_over_baseline: 0.0
+  enable_secondary_delay_regression: true
+
+data:
+  required_validation_status: [passed, passed_with_warnings]
+  exclude_cancelled_flights: true
+  include_diverted_flights_with_valid_departure: true
+  minimum_training_rows: 12
+  minimum_positive_rows: 1
+  minimum_negative_rows: 1
+  allow_optional_passenger_forecast_input: true
+
+splitting:
+  strategy: chronological
+  train_fraction: 0.70
+  validation_fraction: 0.15
+  test_fraction: 0.15
+  minimum_train_rows: 6
+  minimum_validation_rows: 2
+  minimum_test_rows: 2
+  temporal_gap_days: 0
+
+features:
+  use_route: true
+  use_origin_airport: true
+  use_destination_airport: true
+  use_aircraft_type: true
+  use_seat_capacity: true
+  use_scheduled_block_minutes: true
+  use_departure_hour: true
+  use_day_of_week: true
+  use_month: true
+  use_weekend_flag: true
+  use_service_type: true
+  use_schedule_status: true
+  use_predeparture_weather: true
+  use_predeparture_airport_events: true
+  use_predeparture_crew_state: true
+  use_predeparture_aircraft_health: true
+  use_historical_route_delay_features: true
+  use_historical_airport_delay_features: true
+  use_historical_aircraft_delay_features: true
+  use_optional_passenger_forecast: true
+  historical_windows: [7, 28]
+
+models:
+  majority_class_baseline:
+    enabled: true
+  route_historical_rate_baseline:
+    enabled: true
+  logistic_regression:
+    enabled: true
+
+classification:
+  default_probability_threshold: 0.50
+  threshold_selection_metric: f1
+  threshold_search_values: [0.30, 0.40, 0.50, 0.60, 0.70]
+
+evaluation:
+  metrics: [roc_auc, pr_auc, log_loss, brier_score, precision, recall, f1, specificity, balanced_accuracy]
+  evaluate_by_route: true
+  evaluate_by_origin_airport: true
+  evaluate_by_time_band: true
+  evaluate_by_weather_exposure: true
+  probability_bins: 10
+
+risk_bands:
+  low:
+    minimum_probability: 0.00
+    maximum_probability: 0.30
+  medium:
+    minimum_probability: 0.30
+    maximum_probability: 0.60
+  high:
+    minimum_probability: 0.60
+    maximum_probability: 1.00

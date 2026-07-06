@@ -1,1 +1,1 @@
-"""Future flight-delay prediction domain."""
+"""Flight-delay prediction domain."""

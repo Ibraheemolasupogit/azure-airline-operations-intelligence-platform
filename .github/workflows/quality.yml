@@ -49,5 +49,8 @@ jobs:
       - name: Forecast CI passenger demand
         run: make forecast-passenger-demand-ci
 
+      - name: Predict CI flight delays
+        run: make predict-flight-delays-ci
+
       - name: Clean generated CI artefacts
         run: make clean

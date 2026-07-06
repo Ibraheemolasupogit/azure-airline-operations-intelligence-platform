@@ -20,6 +20,15 @@ from airline_operations_intelligence.data_generation.config import (
 )
 from airline_operations_intelligence.data_generation.manifest import describe_manifest
 from airline_operations_intelligence.data_generation.orchestrator import generate_data
+from airline_operations_intelligence.delay_prediction.config import (
+    DEFAULT_DELAY_PREDICTION_CONFIG_PATH,
+    load_delay_prediction_config,
+)
+from airline_operations_intelligence.delay_prediction.config import (
+    with_overrides as with_delay_prediction_overrides,
+)
+from airline_operations_intelligence.delay_prediction.pipeline import predict_flight_delays
+from airline_operations_intelligence.delay_prediction.reporting import describe_delay_prediction_report
 from airline_operations_intelligence.forecasting.config import (
     DEFAULT_FORECASTING_CONFIG_PATH,
     load_forecasting_config,
@@ -76,6 +85,8 @@ REQUIRED_FILES = (
     "configs/validation_ci.yaml",
     "configs/passenger_forecasting.yaml",
     "configs/passenger_forecasting_ci.yaml",
+    "configs/delay_prediction.yaml",
+    "configs/delay_prediction_ci.yaml",
 )
 
 
@@ -311,6 +322,67 @@ def build_parser() -> argparse.ArgumentParser:
         required=True,
         help="Completed passenger forecasting report directory containing forecast-manifest.json.",
     )
+
+    delay_parser = subparsers.add_parser(
+        "predict-flight-delays",
+        help="Train and evaluate deterministic flight-delay prediction for Milestone 5.",
+    )
+    delay_parser.add_argument(
+        "--validation-report-dir",
+        type=Path,
+        required=True,
+        help="Completed Milestone 3 validation report directory.",
+    )
+    delay_parser.add_argument(
+        "--passenger-forecast-report-dir",
+        type=Path,
+        default=None,
+        help="Optional completed Milestone 4 forecast report directory.",
+    )
+    delay_parser.add_argument(
+        "--config",
+        type=Path,
+        default=DEFAULT_DELAY_PREDICTION_CONFIG_PATH,
+        help="Delay prediction YAML configuration path.",
+    )
+    delay_parser.add_argument(
+        "--delay-run-id",
+        type=str,
+        default=None,
+        help="Explicit filesystem-safe delay prediction run ID.",
+    )
+    delay_parser.add_argument("--output-root", type=Path, default=None, help="Override delay output root.")
+    delay_parser.add_argument("--model-root", type=Path, default=None, help="Override delay model root.")
+    delay_parser.add_argument("--report-root", type=Path, default=None, help="Override delay report root.")
+    delay_parser.add_argument("--seed", type=int, default=None, help="Override deterministic model seed.")
+    delay_parser.add_argument(
+        "--delay-threshold-minutes",
+        type=int,
+        default=None,
+        help="Override target delay threshold in minutes.",
+    )
+    delay_parser.add_argument(
+        "--prediction-cutoff-minutes",
+        type=int,
+        default=None,
+        help="Override pre-departure prediction cutoff in minutes.",
+    )
+    delay_parser.add_argument(
+        "--overwrite",
+        action="store_true",
+        help="Replace existing delay prediction/model/report outputs for the same run ID.",
+    )
+
+    describe_delay_parser = subparsers.add_parser(
+        "describe-delay-prediction",
+        help="Describe a completed delay prediction run without retraining.",
+    )
+    describe_delay_parser.add_argument(
+        "--delay-report-dir",
+        type=Path,
+        required=True,
+        help="Completed delay prediction report directory containing delay-prediction-manifest.json.",
+    )
     return parser
 
 
@@ -438,6 +510,47 @@ def main(argv: Sequence[str] | None = None) -> int:
     if args.command == "describe-passenger-forecast":
         try:
             description = describe_forecast_report(args.forecast_report_dir)
+        except AirlineOperationsError as exc:
+            LOGGER.error("%s", exc)
+            return 1
+        print(description)
+        return 0
+
+    if args.command == "predict-flight-delays":
+        try:
+            delay_config = load_delay_prediction_config(args.config)
+            delay_config = with_delay_prediction_overrides(
+                delay_config,
+                output_root=args.output_root,
+                model_root=args.model_root,
+                report_root=args.report_root,
+                seed=args.seed,
+                delay_threshold_minutes=args.delay_threshold_minutes,
+                prediction_cutoff_minutes=args.prediction_cutoff_minutes,
+                overwrite=True if args.overwrite else None,
+            )
+            delay_result = predict_flight_delays(
+                validation_report_dir=args.validation_report_dir,
+                passenger_forecast_report_dir=args.passenger_forecast_report_dir,
+                config=delay_config,
+                delay_run_id=args.delay_run_id,
+            )
+        except AirlineOperationsError as exc:
+            LOGGER.error("%s", exc)
+            return 1
+        LOGGER.info(
+            "Predicted flight delays for validation run %s as %s",
+            delay_result.source_validation_run_id,
+            delay_result.delay_run_id,
+        )
+        LOGGER.info("Champion model: %s", delay_result.champion_model_id)
+        LOGGER.info("Selected probability threshold: %.3f", delay_result.selected_threshold)
+        LOGGER.info("Partition rows: %s", delay_result.partition_row_counts)
+        return 0 if delay_result.overall_status == "passed" else 1
+
+    if args.command == "describe-delay-prediction":
+        try:
+            description = describe_delay_prediction_report(args.delay_report_dir)
         except AirlineOperationsError as exc:
             LOGGER.error("%s", exc)
             return 1

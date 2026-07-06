@@ -6,7 +6,7 @@ built, evaluated, and compared before advanced methods are adopted.
 ## Use Cases
 
 - Passenger-demand forecasting, implemented locally in Milestone 4.
-- Flight-delay prediction.
+- Flight-delay prediction, implemented locally in Milestone 5.
 - Aircraft-maintenance risk.
 - Anomaly detection.
 - Disruption scoring.
@@ -42,3 +42,14 @@ built, evaluated, and compared before advanced methods are adopted.
 - Evaluates historical mean, booking-curve, and deterministic linear-regression candidates.
 - Selects a champion using validation metrics only.
 - Writes model artefacts, forecasts, metrics, lineage, and reports locally.
+
+## Implemented Local Delay Prediction
+
+- Consumes completed Milestone 3 validation runs and optionally compatible Milestone 4 passenger
+  forecasts.
+- Uses one prediction per scheduled flight with a configurable pre-departure cutoff.
+- Prevents leakage from actual operations, delay outcomes, future events, and full-dataset target
+  aggregates.
+- Evaluates majority-class, route-history, and deterministic logistic-regression classifiers.
+- Selects a champion and threshold using validation metrics only.
+- Writes predictions, model artefacts, metrics, lineage, and reports locally.

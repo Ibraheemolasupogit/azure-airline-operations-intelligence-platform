@@ -2,11 +2,12 @@
 
 This repository is a local-first airline operations intelligence platform mapped to Microsoft
 Azure services. The current implementation includes the repository foundation and governed
-synthetic aviation data generation, ingestion, validation, and passenger-demand forecasting.
+synthetic aviation data generation, ingestion, validation, passenger-demand forecasting, and
+flight-delay prediction.
 
-No flight-delay prediction, aircraft-maintenance models, disruption scoring, optimisation, GenAI
-assistants, dashboards, Azure infrastructure, deployment workflows, or later-milestone monitoring
-functionality are implemented yet.
+No aircraft-maintenance models, disruption scoring, optimisation, GenAI assistants, dashboards,
+Azure infrastructure, deployment workflows, or later-milestone monitoring functionality are
+implemented yet.
 
 ## Business Problem
 
@@ -135,6 +136,21 @@ python3 -m airline_operations_intelligence.cli describe-passenger-forecast \
   --forecast-report-dir reports/passenger_forecasting/<forecast_run_id>
 ```
 
+Run flight-delay prediction:
+
+```bash
+python3 -m airline_operations_intelligence.cli predict-flight-delays \
+  --validation-report-dir reports/validation/<validation_run_id> \
+  --config configs/delay_prediction.yaml
+```
+
+Describe a completed delay prediction run:
+
+```bash
+python3 -m airline_operations_intelligence.cli describe-delay-prediction \
+  --delay-report-dir reports/delay_prediction/<delay_run_id>
+```
+
 ## Quality Commands
 
 ```bash
@@ -148,15 +164,17 @@ make validate    # Repository validation CLI
 make generate-data-ci  # CI-sized deterministic synthetic data run
 make validate-data-ci  # CI-sized governed validation run
 make forecast-passenger-demand-ci  # CI-sized passenger forecasting run
+make predict-flight-delays-ci  # CI-sized flight-delay prediction run
 make quality     # Full local gate
 ```
 
 ## Roadmap
 
 Milestone 1 established the repository foundation. Milestone 2 added governed synthetic data
-generation. Milestone 3 added governed local ingestion and validation. Milestone 4 adds
-passenger-demand forecasting. Later milestones add delay prediction, maintenance analytics,
-disruption scoring, monitoring, GenAI, Power BI outputs, and Azure deployment architecture.
+generation. Milestone 3 added governed local ingestion and validation. Milestone 4 added
+passenger-demand forecasting. Milestone 5 adds flight-delay prediction. Later milestones add
+maintenance analytics, disruption scoring, monitoring, GenAI, Power BI outputs, and Azure
+deployment architecture.
 
 See [roadmap](docs/milestones/roadmap.md).
 
