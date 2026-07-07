@@ -7,7 +7,7 @@ built, evaluated, and compared before advanced methods are adopted.
 
 - Passenger-demand forecasting, implemented locally in Milestone 4.
 - Flight-delay prediction, implemented locally in Milestone 5.
-- Aircraft-maintenance risk.
+- Aircraft-maintenance risk, implemented locally in Milestone 6 as rules and statistical analytics.
 - Anomaly detection.
 - Disruption scoring.
 - Route-performance analysis.
@@ -53,3 +53,12 @@ built, evaluated, and compared before advanced methods are adopted.
 - Evaluates majority-class, route-history, and deterministic logistic-regression classifiers.
 - Selects a champion and threshold using validation metrics only.
 - Writes predictions, model artefacts, metrics, lineage, and reports locally.
+
+## Implemented Local Maintenance Analytics
+
+- Consumes completed Milestone 3 validation runs.
+- Uses deterministic rules and statistical analytics rather than supervised predictive maintenance.
+- Scores sensor thresholds, telemetry anomalies, degradation trends, fault-code evidence,
+  utilisation, and retrospective operational context.
+- Writes aircraft-level summaries, flight-level risk summaries, alerts, metrics, lineage, and
+  reports locally.

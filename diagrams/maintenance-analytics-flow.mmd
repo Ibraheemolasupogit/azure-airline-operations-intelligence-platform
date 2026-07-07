@@ -1,0 +1,29 @@
+flowchart TD
+    A["Validated aircraft telemetry and operational data"] --> B["Source integrity verification"]
+    B --> C["Telemetry feature engineering"]
+    C --> D["Sensor threshold checks"]
+    C --> E["Statistical anomaly detection"]
+    C --> F["Degradation and utilisation scoring"]
+    C --> G["Fault-code and retrospective context scoring"]
+    D --> H["Component score weighting"]
+    E --> H
+    F --> H
+    G --> H
+    H --> I["Maintenance-risk score and aircraft-health score"]
+    I --> J["Risk bands and alert categories"]
+    J --> K["Aircraft summaries"]
+    J --> L["Flight-level maintenance risk"]
+    J --> M["Maintenance alerts"]
+    K --> N["Metrics, lineage, manifest, and reports"]
+    L --> N
+    M --> N
+
+    S["Synthetic-data boundary"] -.-> B
+    R["Reproducibility and deterministic ordering"] -.-> C
+    Q["Checksum verification"] -.-> B
+    U["Human review required"] -.-> M
+    P["Auditability"] -.-> N
+    AZ1["Future Azure ML mapping"] -.-> H
+    AZ2["Future Azure Data Explorer telemetry mapping"] -.-> C
+    AZ3["Future Azure Monitor alert mapping"] -.-> M
+    AZ4["Future Microsoft Purview lineage mapping"] -.-> N

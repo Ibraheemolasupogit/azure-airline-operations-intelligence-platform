@@ -1,1 +1,1 @@
-"""Future aircraft-health analytics domain."""
+"""Aircraft-health and maintenance analytics domain."""

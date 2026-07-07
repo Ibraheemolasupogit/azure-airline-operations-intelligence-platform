@@ -1,0 +1,59 @@
+maintenance_analytics:
+  output_root: outputs/maintenance_analytics
+  report_root: reports/maintenance_analytics
+  overwrite: false
+  seed: 42
+  accepted_validation_status: [passed, passed_with_warnings]
+  risk_score_thresholds:
+    low: 0.30
+    medium: 0.60
+    high: 0.80
+  alert_thresholds:
+    advisory: 0.45
+    watch: 0.60
+    action_recommended: 0.80
+  rolling_windows: [3, 7]
+  enable_statistical_anomaly_detection: true
+  enable_flight_level_risk: true
+  minimum_aircraft_observations: 1
+  maximum_alerts_per_aircraft: 5
+
+telemetry_bounds:
+  engine_1_vibration:
+    warning_min: 0.0
+    warning_max: 6.0
+    critical_max: 8.0
+  engine_2_vibration:
+    warning_min: 0.0
+    warning_max: 6.0
+    critical_max: 8.0
+  engine_1_temperature_c:
+    warning_min: 200.0
+    warning_max: 850.0
+    critical_max: 950.0
+  engine_2_temperature_c:
+    warning_min: 200.0
+    warning_max: 850.0
+    critical_max: 950.0
+  hydraulic_pressure_psi:
+    warning_min: 2500.0
+    warning_max: 3500.0
+    critical_min: 2000.0
+    critical_max: 4000.0
+  oil_pressure_psi:
+    warning_min: 35.0
+    warning_max: 90.0
+    critical_min: 20.0
+    critical_max: 110.0
+  brake_temperature_c:
+    warning_min: 0.0
+    warning_max: 350.0
+    critical_max: 500.0
+
+risk_weights:
+  sensor_thresholds: 0.30
+  telemetry_anomaly: 0.20
+  degradation_trend: 0.20
+  fault_code: 0.15
+  utilisation: 0.10
+  recent_delay_or_operational_context: 0.05

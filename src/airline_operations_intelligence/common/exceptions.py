@@ -155,3 +155,35 @@ class DelayOutputCollisionError(AirlineOperationsError):
 
 class DelayArtefactError(AirlineOperationsError):
     """Raised when delay prediction artefacts cannot be written or verified."""
+
+
+class MaintenanceAnalyticsConfigurationError(AirlineOperationsError):
+    """Raised when maintenance analytics configuration is invalid."""
+
+
+class MaintenanceAnalyticsSourceError(AirlineOperationsError):
+    """Raised when maintenance analytics sources cannot be used."""
+
+
+class MaintenanceAnalyticsIntegrityError(MaintenanceAnalyticsSourceError):
+    """Raised when maintenance analytics source integrity checks fail."""
+
+
+class MaintenanceFeatureEngineeringError(AirlineOperationsError):
+    """Raised when maintenance features cannot be created."""
+
+
+class MaintenanceScoringError(AirlineOperationsError):
+    """Raised when maintenance scoring cannot be completed."""
+
+
+class MaintenanceAlertError(AirlineOperationsError):
+    """Raised when maintenance alerts cannot be generated."""
+
+
+class MaintenanceOutputCollisionError(AirlineOperationsError):
+    """Raised when maintenance output directories already exist."""
+
+
+class MaintenanceArtefactError(AirlineOperationsError):
+    """Raised when maintenance artefacts cannot be written or read."""

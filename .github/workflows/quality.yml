@@ -52,5 +52,8 @@ jobs:
       - name: Predict CI flight delays
         run: make predict-flight-delays-ci
 
+      - name: Analyse CI aircraft health
+        run: make analyse-aircraft-health-ci
+
       - name: Clean generated CI artefacts
         run: make clean

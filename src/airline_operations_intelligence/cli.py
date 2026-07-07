@@ -38,6 +38,15 @@ from airline_operations_intelligence.forecasting.config import (
 )
 from airline_operations_intelligence.forecasting.pipeline import forecast_passenger_demand
 from airline_operations_intelligence.forecasting.reporting import describe_forecast_report
+from airline_operations_intelligence.maintenance.config import (
+    DEFAULT_MAINTENANCE_ANALYTICS_CONFIG_PATH,
+    load_maintenance_config,
+)
+from airline_operations_intelligence.maintenance.config import (
+    with_overrides as with_maintenance_overrides,
+)
+from airline_operations_intelligence.maintenance.pipeline import analyse_aircraft_health
+from airline_operations_intelligence.maintenance.reporting import describe_aircraft_health_report
 from airline_operations_intelligence.validation.config import (
     DEFAULT_VALIDATION_CONFIG_PATH,
     load_validation_config,
@@ -87,6 +96,8 @@ REQUIRED_FILES = (
     "configs/passenger_forecasting_ci.yaml",
     "configs/delay_prediction.yaml",
     "configs/delay_prediction_ci.yaml",
+    "configs/maintenance_analytics.yaml",
+    "configs/maintenance_analytics_ci.yaml",
 )
 
 
@@ -383,6 +394,48 @@ def build_parser() -> argparse.ArgumentParser:
         required=True,
         help="Completed delay prediction report directory containing delay-prediction-manifest.json.",
     )
+
+    maintenance_parser = subparsers.add_parser(
+        "analyse-aircraft-health",
+        help="Run deterministic aircraft-health and maintenance analytics for Milestone 6.",
+    )
+    maintenance_parser.add_argument(
+        "--validation-report-dir",
+        type=Path,
+        required=True,
+        help="Completed Milestone 3 validation report directory.",
+    )
+    maintenance_parser.add_argument(
+        "--config",
+        type=Path,
+        default=DEFAULT_MAINTENANCE_ANALYTICS_CONFIG_PATH,
+        help="Maintenance analytics YAML configuration path.",
+    )
+    maintenance_parser.add_argument(
+        "--maintenance-run-id",
+        type=str,
+        default=None,
+        help="Explicit filesystem-safe maintenance analytics run ID.",
+    )
+    maintenance_parser.add_argument("--output-root", type=Path, default=None, help="Override maintenance output root.")
+    maintenance_parser.add_argument("--report-root", type=Path, default=None, help="Override maintenance report root.")
+    maintenance_parser.add_argument("--seed", type=int, default=None, help="Override deterministic seed.")
+    maintenance_parser.add_argument(
+        "--overwrite",
+        action="store_true",
+        help="Replace existing maintenance output/report directories for the same run ID.",
+    )
+
+    describe_maintenance_parser = subparsers.add_parser(
+        "describe-aircraft-health",
+        help="Describe a completed aircraft-health analytics run without rerunning analytics.",
+    )
+    describe_maintenance_parser.add_argument(
+        "--maintenance-report-dir",
+        type=Path,
+        required=True,
+        help="Completed maintenance analytics report directory containing maintenance-analytics-manifest.json.",
+    )
     return parser
 
 
@@ -551,6 +604,41 @@ def main(argv: Sequence[str] | None = None) -> int:
     if args.command == "describe-delay-prediction":
         try:
             description = describe_delay_prediction_report(args.delay_report_dir)
+        except AirlineOperationsError as exc:
+            LOGGER.error("%s", exc)
+            return 1
+        print(description)
+        return 0
+
+    if args.command == "analyse-aircraft-health":
+        try:
+            maintenance_config = load_maintenance_config(args.config)
+            maintenance_config = with_maintenance_overrides(
+                maintenance_config,
+                output_root=args.output_root,
+                report_root=args.report_root,
+                seed=args.seed,
+                overwrite=True if args.overwrite else None,
+            )
+            maintenance_result = analyse_aircraft_health(
+                validation_report_dir=args.validation_report_dir,
+                config=maintenance_config,
+                maintenance_run_id=args.maintenance_run_id,
+            )
+        except AirlineOperationsError as exc:
+            LOGGER.error("%s", exc)
+            return 1
+        LOGGER.info(
+            "Analysed aircraft health for validation run %s as %s",
+            maintenance_result.source_validation_run_id,
+            maintenance_result.maintenance_run_id,
+        )
+        LOGGER.info("Row counts: %s", maintenance_result.row_counts)
+        return 0 if maintenance_result.overall_status == "passed" else 1
+
+    if args.command == "describe-aircraft-health":
+        try:
+            description = describe_aircraft_health_report(args.maintenance_report_dir)
         except AirlineOperationsError as exc:
             LOGGER.error("%s", exc)
             return 1
