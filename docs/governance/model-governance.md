@@ -1,8 +1,8 @@
 # Model Governance
 
 Milestones 4, 5, and 6 introduce local passenger-demand forecasting, flight-delay prediction, and
-aircraft-health maintenance analytics evidence. The workflows are deterministic, auditable, and
-scoped to synthetic data.
+aircraft-health maintenance analytics, and operational disruption scoring evidence. The workflows
+are deterministic, auditable, and scoped to synthetic data.
 
 ## Controls
 

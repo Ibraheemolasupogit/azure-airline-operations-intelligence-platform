@@ -1,1 +1,1 @@
-"""Future operational disruption scoring domain."""
+"""Operational disruption scoring domain."""

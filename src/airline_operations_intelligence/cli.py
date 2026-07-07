@@ -29,6 +29,15 @@ from airline_operations_intelligence.delay_prediction.config import (
 )
 from airline_operations_intelligence.delay_prediction.pipeline import predict_flight_delays
 from airline_operations_intelligence.delay_prediction.reporting import describe_delay_prediction_report
+from airline_operations_intelligence.disruption.config import (
+    DEFAULT_DISRUPTION_SCORING_CONFIG_PATH,
+    load_disruption_config,
+)
+from airline_operations_intelligence.disruption.config import (
+    with_overrides as with_disruption_overrides,
+)
+from airline_operations_intelligence.disruption.pipeline import score_disruptions
+from airline_operations_intelligence.disruption.reporting import describe_disruption_report
 from airline_operations_intelligence.forecasting.config import (
     DEFAULT_FORECASTING_CONFIG_PATH,
     load_forecasting_config,
@@ -98,6 +107,8 @@ REQUIRED_FILES = (
     "configs/delay_prediction_ci.yaml",
     "configs/maintenance_analytics.yaml",
     "configs/maintenance_analytics_ci.yaml",
+    "configs/disruption_scoring.yaml",
+    "configs/disruption_scoring_ci.yaml",
 )
 
 
@@ -436,6 +447,57 @@ def build_parser() -> argparse.ArgumentParser:
         required=True,
         help="Completed maintenance analytics report directory containing maintenance-analytics-manifest.json.",
     )
+
+    disruption_parser = subparsers.add_parser(
+        "score-disruptions",
+        help="Score operational disruption severity and recovery priority for Milestone 7.",
+    )
+    disruption_parser.add_argument(
+        "--validation-report-dir",
+        type=Path,
+        required=True,
+        help="Completed Milestone 3 validation report directory.",
+    )
+    disruption_parser.add_argument(
+        "--passenger-forecast-report-dir",
+        type=Path,
+        default=None,
+        help="Optional completed Milestone 4 passenger forecast report directory.",
+    )
+    disruption_parser.add_argument(
+        "--delay-prediction-report-dir",
+        type=Path,
+        default=None,
+        help="Optional completed Milestone 5 delay prediction report directory.",
+    )
+    disruption_parser.add_argument(
+        "--maintenance-report-dir",
+        type=Path,
+        default=None,
+        help="Optional completed Milestone 6 maintenance analytics report directory.",
+    )
+    disruption_parser.add_argument(
+        "--config",
+        type=Path,
+        default=DEFAULT_DISRUPTION_SCORING_CONFIG_PATH,
+        help="Disruption scoring YAML configuration path.",
+    )
+    disruption_parser.add_argument("--disruption-run-id", type=str, default=None, help="Explicit disruption run ID.")
+    disruption_parser.add_argument("--output-root", type=Path, default=None, help="Override disruption output root.")
+    disruption_parser.add_argument("--report-root", type=Path, default=None, help="Override disruption report root.")
+    disruption_parser.add_argument("--seed", type=int, default=None, help="Override deterministic seed.")
+    disruption_parser.add_argument("--overwrite", action="store_true", help="Replace existing disruption outputs.")
+
+    describe_disruption_parser = subparsers.add_parser(
+        "describe-disruption-scoring",
+        help="Describe a completed disruption scoring run without rerunning scoring.",
+    )
+    describe_disruption_parser.add_argument(
+        "--disruption-report-dir",
+        type=Path,
+        required=True,
+        help="Completed disruption scoring report directory containing disruption-scoring-manifest.json.",
+    )
     return parser
 
 
@@ -639,6 +701,44 @@ def main(argv: Sequence[str] | None = None) -> int:
     if args.command == "describe-aircraft-health":
         try:
             description = describe_aircraft_health_report(args.maintenance_report_dir)
+        except AirlineOperationsError as exc:
+            LOGGER.error("%s", exc)
+            return 1
+        print(description)
+        return 0
+
+    if args.command == "score-disruptions":
+        try:
+            disruption_config = load_disruption_config(args.config)
+            disruption_config = with_disruption_overrides(
+                disruption_config,
+                output_root=args.output_root,
+                report_root=args.report_root,
+                seed=args.seed,
+                overwrite=True if args.overwrite else None,
+            )
+            disruption_result = score_disruptions(
+                validation_report_dir=args.validation_report_dir,
+                passenger_forecast_report_dir=args.passenger_forecast_report_dir,
+                delay_prediction_report_dir=args.delay_prediction_report_dir,
+                maintenance_report_dir=args.maintenance_report_dir,
+                config=disruption_config,
+                disruption_run_id=args.disruption_run_id,
+            )
+        except AirlineOperationsError as exc:
+            LOGGER.error("%s", exc)
+            return 1
+        LOGGER.info(
+            "Scored disruptions for validation run %s as %s",
+            disruption_result.source_validation_run_id,
+            disruption_result.disruption_run_id,
+        )
+        LOGGER.info("Row counts: %s", disruption_result.row_counts)
+        return 0 if disruption_result.overall_status == "passed" else 1
+
+    if args.command == "describe-disruption-scoring":
+        try:
+            description = describe_disruption_report(args.disruption_report_dir)
         except AirlineOperationsError as exc:
             LOGGER.error("%s", exc)
             return 1

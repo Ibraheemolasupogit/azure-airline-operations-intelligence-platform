@@ -55,5 +55,8 @@ jobs:
       - name: Analyse CI aircraft health
         run: make analyse-aircraft-health-ci
 
+      - name: Score CI disruptions
+        run: make score-disruptions-ci
+
       - name: Clean generated CI artefacts
         run: make clean

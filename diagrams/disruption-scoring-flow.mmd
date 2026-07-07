@@ -1,0 +1,33 @@
+flowchart TD
+    A["Milestone 3 validated operational data"] --> B["Source integrity verification"]
+    B --> C["Flight-level disruption feature table"]
+    PF["Optional Milestone 4 passenger forecast"] -.-> C
+    DP["Optional Milestone 5 delay prediction"] -.-> C
+    MA["Optional Milestone 6 maintenance analytics"] -.-> C
+    C --> L["Timing and leakage checks"]
+    L --> D["Delay component"]
+    L --> W["Weather component"]
+    L --> E["Airport-event component"]
+    L --> CR["Crew component"]
+    L --> AH["Aircraft-health component"]
+    L --> PP["Passenger-pressure component"]
+    L --> NR["Network reactionary component"]
+    D --> S["Weighted disruption severity score"]
+    W --> S
+    E --> S
+    CR --> S
+    AH --> S
+    PP --> S
+    NR --> S
+    S --> R["Risk bands and recovery priority"]
+    R --> AL["Deterministic disruption alerts"]
+    R --> SUM["Route, airport, aircraft, and daily summaries"]
+    AL --> OUT["Metrics, manifest, lineage, and reports"]
+    SUM --> OUT
+    X["Synthetic-data boundary"] -.-> B
+    H["Human review required"] -.-> AL
+    G["No optimisation or automation"] -.-> R
+    AZ1["Future Purview lineage mapping"] -.-> OUT
+    AZ2["Future Azure ML batch mapping"] -.-> S
+    AZ3["Future Azure Monitor mapping"] -.-> AL
+    AZ4["Future Power BI mapping"] -.-> SUM

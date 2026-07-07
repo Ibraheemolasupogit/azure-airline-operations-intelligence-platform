@@ -187,3 +187,39 @@ class MaintenanceOutputCollisionError(AirlineOperationsError):
 
 class MaintenanceArtefactError(AirlineOperationsError):
     """Raised when maintenance artefacts cannot be written or read."""
+
+
+class DisruptionScoringConfigurationError(AirlineOperationsError):
+    """Raised when disruption scoring configuration is invalid."""
+
+
+class DisruptionScoringSourceError(AirlineOperationsError):
+    """Raised when disruption scoring sources cannot be used."""
+
+
+class DisruptionScoringIntegrityError(DisruptionScoringSourceError):
+    """Raised when disruption source manifests or checksums do not verify."""
+
+
+class DisruptionFeatureEngineeringError(AirlineOperationsError):
+    """Raised when disruption features cannot be built safely."""
+
+
+class DisruptionLeakageDetectedError(DisruptionFeatureEngineeringError):
+    """Raised when forward disruption risk would use prohibited outcome fields."""
+
+
+class DisruptionScoringError(AirlineOperationsError):
+    """Raised when disruption scoring cannot complete."""
+
+
+class DisruptionAlertError(AirlineOperationsError):
+    """Raised when disruption alerts cannot be generated."""
+
+
+class DisruptionOutputCollisionError(AirlineOperationsError):
+    """Raised when disruption output directories already exist."""
+
+
+class DisruptionArtefactError(AirlineOperationsError):
+    """Raised when disruption artefacts cannot be written or read."""

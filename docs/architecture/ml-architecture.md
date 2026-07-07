@@ -9,7 +9,7 @@ built, evaluated, and compared before advanced methods are adopted.
 - Flight-delay prediction, implemented locally in Milestone 5.
 - Aircraft-maintenance risk, implemented locally in Milestone 6 as rules and statistical analytics.
 - Anomaly detection.
-- Disruption scoring.
+- Disruption scoring, implemented locally in Milestone 7.
 - Route-performance analysis.
 - Optional schedule optimisation.
 

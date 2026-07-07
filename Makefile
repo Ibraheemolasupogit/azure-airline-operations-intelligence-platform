@@ -1,6 +1,6 @@
 PYTHON ?= python3
 
-.PHONY: install format lint typecheck test docs-check yaml-check validate generate-data-ci validate-data-ci forecast-passenger-demand-ci predict-flight-delays-ci analyse-aircraft-health-ci test-data-generation test-ingestion-validation test-passenger-forecasting test-delay-prediction test-maintenance-analytics describe-validation-ci describe-passenger-forecast-ci describe-delay-prediction-ci describe-aircraft-health-ci quality clean
+.PHONY: install format lint typecheck test docs-check yaml-check validate generate-data-ci validate-data-ci forecast-passenger-demand-ci predict-flight-delays-ci analyse-aircraft-health-ci score-disruptions-ci test-data-generation test-ingestion-validation test-passenger-forecasting test-delay-prediction test-maintenance-analytics test-disruption-scoring describe-validation-ci describe-passenger-forecast-ci describe-delay-prediction-ci describe-aircraft-health-ci describe-disruption-scoring-ci quality clean
 
 install:
 	$(PYTHON) -m pip install --upgrade pip
@@ -44,6 +44,9 @@ predict-flight-delays-ci: validate-data-ci
 analyse-aircraft-health-ci: validate-data-ci
 	$(PYTHON) -m airline_operations_intelligence.cli analyse-aircraft-health --validation-report-dir reports/validation/ci-quality --config configs/maintenance_analytics_ci.yaml --maintenance-run-id ci-quality --overwrite
 
+score-disruptions-ci: validate-data-ci
+	$(PYTHON) -m airline_operations_intelligence.cli score-disruptions --validation-report-dir reports/validation/ci-quality --config configs/disruption_scoring_ci.yaml --disruption-run-id ci-quality --overwrite
+
 test-data-generation:
 	$(PYTHON) -m pytest tests/integration/test_data_generation.py
 
@@ -59,6 +62,9 @@ test-delay-prediction:
 test-maintenance-analytics:
 	$(PYTHON) -m pytest tests/unit/test_maintenance_analytics_config.py tests/unit/test_maintenance_analytics.py tests/integration/test_maintenance_analytics_pipeline.py
 
+test-disruption-scoring:
+	$(PYTHON) -m pytest tests/unit/test_disruption_scoring_config.py tests/unit/test_disruption_scoring.py tests/integration/test_disruption_scoring_pipeline.py
+
 describe-validation-ci:
 	$(PYTHON) -m airline_operations_intelligence.cli describe-validation --report-dir reports/validation/ci-quality
 
@@ -71,7 +77,10 @@ describe-delay-prediction-ci:
 describe-aircraft-health-ci:
 	$(PYTHON) -m airline_operations_intelligence.cli describe-aircraft-health --maintenance-report-dir reports/maintenance_analytics/ci-quality
 
-quality: lint typecheck test docs-check yaml-check validate generate-data-ci validate-data-ci forecast-passenger-demand-ci predict-flight-delays-ci analyse-aircraft-health-ci
+describe-disruption-scoring-ci:
+	$(PYTHON) -m airline_operations_intelligence.cli describe-disruption-scoring --disruption-report-dir reports/disruption_scoring/ci-quality
+
+quality: lint typecheck test docs-check yaml-check validate generate-data-ci validate-data-ci forecast-passenger-demand-ci predict-flight-delays-ci analyse-aircraft-health-ci score-disruptions-ci
 
 clean:
-	rm -rf .mypy_cache .pytest_cache .ruff_cache build dist *.egg-info data/raw/ci-quality data/raw/.ci-quality.tmp data/interim/ci-quality data/interim/.ci-quality.tmp data/processed/ci-quality data/processed/.ci-quality.tmp reports/validation/ci-quality reports/validation/.ci-quality.tmp outputs/passenger_forecasting/ci-quality outputs/passenger_forecasting/.ci-quality.tmp outputs/models/passenger_forecasting/ci-quality outputs/models/passenger_forecasting/.ci-quality.tmp reports/passenger_forecasting/ci-quality reports/passenger_forecasting/.ci-quality.tmp outputs/delay_prediction/ci-quality outputs/delay_prediction/.ci-quality.tmp outputs/models/delay_prediction/ci-quality outputs/models/delay_prediction/.ci-quality.tmp reports/delay_prediction/ci-quality reports/delay_prediction/.ci-quality.tmp outputs/maintenance_analytics/ci-quality outputs/maintenance_analytics/.ci-quality.tmp reports/maintenance_analytics/ci-quality reports/maintenance_analytics/.ci-quality.tmp
+	rm -rf .mypy_cache .pytest_cache .ruff_cache build dist *.egg-info data/raw/ci-quality data/raw/.ci-quality.tmp data/interim/ci-quality data/interim/.ci-quality.tmp data/processed/ci-quality data/processed/.ci-quality.tmp reports/validation/ci-quality reports/validation/.ci-quality.tmp outputs/passenger_forecasting/ci-quality outputs/passenger_forecasting/.ci-quality.tmp outputs/models/passenger_forecasting/ci-quality outputs/models/passenger_forecasting/.ci-quality.tmp reports/passenger_forecasting/ci-quality reports/passenger_forecasting/.ci-quality.tmp outputs/delay_prediction/ci-quality outputs/delay_prediction/.ci-quality.tmp outputs/models/delay_prediction/ci-quality outputs/models/delay_prediction/.ci-quality.tmp reports/delay_prediction/ci-quality reports/delay_prediction/.ci-quality.tmp outputs/maintenance_analytics/ci-quality outputs/maintenance_analytics/.ci-quality.tmp reports/maintenance_analytics/ci-quality reports/maintenance_analytics/.ci-quality.tmp outputs/disruption_scoring/ci-quality outputs/disruption_scoring/.ci-quality.tmp reports/disruption_scoring/ci-quality reports/disruption_scoring/.ci-quality.tmp

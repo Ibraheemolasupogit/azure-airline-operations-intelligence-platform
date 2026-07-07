@@ -3,10 +3,10 @@
 This repository is a local-first airline operations intelligence platform mapped to Microsoft
 Azure services. The current implementation includes the repository foundation and governed
 synthetic aviation data generation, ingestion, validation, passenger-demand forecasting,
-flight-delay prediction, and aircraft-health maintenance analytics.
+flight-delay prediction, aircraft-health maintenance analytics, and operational disruption scoring.
 
-No disruption scoring, optimisation, GenAI assistants, dashboards, Azure infrastructure,
-deployment workflows, or later-milestone monitoring functionality are implemented yet.
+No optimisation, GenAI assistants, dashboards, Azure infrastructure, deployment workflows, or
+later-milestone monitoring functionality are implemented yet.
 
 ## Business Problem
 
@@ -158,6 +158,14 @@ python3 -m airline_operations_intelligence.cli analyse-aircraft-health \
   --config configs/maintenance_analytics.yaml
 ```
 
+Run disruption scoring:
+
+```bash
+python3 -m airline_operations_intelligence.cli score-disruptions \
+  --validation-report-dir reports/validation/<validation_run_id> \
+  --config configs/disruption_scoring.yaml
+```
+
 ## Quality Commands
 
 ```bash
@@ -173,6 +181,7 @@ make validate-data-ci  # CI-sized governed validation run
 make forecast-passenger-demand-ci  # CI-sized passenger forecasting run
 make predict-flight-delays-ci  # CI-sized flight-delay prediction run
 make analyse-aircraft-health-ci  # CI-sized aircraft-health analytics run
+make score-disruptions-ci  # CI-sized disruption scoring run
 make quality     # Full local gate
 ```
 
@@ -180,9 +189,9 @@ make quality     # Full local gate
 
 Milestone 1 established the repository foundation. Milestone 2 added governed synthetic data
 generation. Milestone 3 added governed local ingestion and validation. Milestone 4 added
-passenger-demand forecasting. Milestone 5 added flight-delay prediction. Milestone 6 adds
-aircraft-health maintenance analytics. Later milestones add disruption scoring, monitoring,
-GenAI, Power BI outputs, and Azure deployment architecture.
+passenger-demand forecasting. Milestone 5 added flight-delay prediction. Milestone 6 added
+aircraft-health maintenance analytics. Milestone 7 adds operational disruption scoring. Later
+milestones add monitoring, GenAI, Power BI outputs, and Azure deployment architecture.
 
 See [roadmap](docs/milestones/roadmap.md).
 

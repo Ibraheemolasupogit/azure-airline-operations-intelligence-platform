@@ -33,11 +33,13 @@ reports/validation/*
 reports/passenger_forecasting/*
 reports/delay_prediction/*
 reports/maintenance_analytics/*
+reports/disruption_scoring/*
 outputs/passenger_forecasting/*
 outputs/models/passenger_forecasting/*
 outputs/delay_prediction/*
 outputs/models/delay_prediction/*
 outputs/maintenance_analytics/*
+outputs/disruption_scoring/*
 *.log
 data/raw/.*.tmp/
 data/interim/.*.tmp/
@@ -46,11 +48,13 @@ reports/validation/.*.tmp/
 reports/passenger_forecasting/.*.tmp/
 reports/delay_prediction/.*.tmp/
 reports/maintenance_analytics/.*.tmp/
+reports/disruption_scoring/.*.tmp/
 outputs/passenger_forecasting/.*.tmp/
 outputs/models/passenger_forecasting/.*.tmp/
 outputs/delay_prediction/.*.tmp/
 outputs/models/delay_prediction/.*.tmp/
 outputs/maintenance_analytics/.*.tmp/
+outputs/disruption_scoring/.*.tmp/
 models/
 mlruns/
 !data/raw/.gitkeep

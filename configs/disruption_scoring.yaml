@@ -1,0 +1,62 @@
+disruption_scoring:
+  output_root: outputs/disruption_scoring
+  report_root: reports/disruption_scoring
+  overwrite: false
+  seed: 42
+  accepted_validation_status: [passed, passed_with_warnings]
+  enable_forward_risk_score: true
+  enable_retrospective_score: true
+  maximum_alerts_per_run: 100
+
+input_options:
+  use_passenger_forecast: true
+  use_delay_prediction: true
+  use_maintenance_analytics: true
+  require_optional_inputs: false
+
+risk_bands:
+  low:
+    minimum_score: 0.00
+    maximum_score: 0.30
+  medium:
+    minimum_score: 0.30
+    maximum_score: 0.60
+  high:
+    minimum_score: 0.60
+    maximum_score: 0.80
+  severe:
+    minimum_score: 0.80
+    maximum_score: 1.00
+
+recovery_priority:
+  monitor:
+    minimum_score: 0.00
+    maximum_score: 0.30
+  review:
+    minimum_score: 0.30
+    maximum_score: 0.60
+  prioritise:
+    minimum_score: 0.60
+    maximum_score: 0.80
+  urgent_review:
+    minimum_score: 0.80
+    maximum_score: 1.00
+
+component_weights:
+  delay: 0.25
+  weather: 0.15
+  airport_events: 0.15
+  crew: 0.15
+  aircraft_health: 0.10
+  passenger_pressure: 0.10
+  network_reactionary: 0.10
+
+thresholds:
+  material_delay_minutes: 15
+  severe_delay_minutes: 60
+  high_load_factor: 0.90
+  severe_weather_impact: 0.75
+  high_airport_capacity_reduction: 40.0
+  high_crew_connection_risk_minutes: 45
+  high_maintenance_risk: 0.60
+  high_reactionary_delay_minutes: 30
