@@ -1,0 +1,50 @@
+flowchart TB
+  subgraph Inputs["Explicit completed artefacts"]
+    Generation["Milestone 2 generation<br/>generation-manifest.json"]
+    Validation["Milestone 3 validation<br/>validation-manifest.json"]
+    Forecast["Milestone 4 passenger forecasting<br/>forecast-manifest.json"]
+    Delay["Milestone 5 delay prediction<br/>delay-prediction-manifest.json"]
+    Maintenance["Milestone 6 maintenance analytics<br/>maintenance-analytics-manifest.json"]
+    Disruption["Milestone 7 disruption scoring<br/>disruption-scoring-manifest.json"]
+    Baseline["Optional previous monitoring run<br/>monitoring-manifest.json"]
+  end
+
+  Verify["Manifest and checksum verification"]
+  Compatibility["Validation-run lineage compatibility checks"]
+  Metrics["Domain metric extraction"]
+  Checks["Stable MON-* monitoring checks"]
+  Drift["Deterministic drift-style comparison"]
+  Alerts["Local conservative alert generation"]
+  Health["Domain and platform health summaries"]
+  Outputs["Monitoring CSV and JSONL outputs"]
+  Reports["Monitoring manifest, lineage, and reports"]
+
+  subgraph FutureAzure["Future Azure mappings only"]
+    AzureMonitor["Azure Monitor custom metrics and alert rules"]
+    LogAnalytics["Log Analytics tables"]
+    AppInsights["Application Insights telemetry mapping"]
+    ADX["Azure Data Explorer summaries"]
+    Purview["Microsoft Purview lineage"]
+    PowerBI["Power BI semantic model in Milestone 10"]
+    AzureML["Azure Machine Learning metrics"]
+  end
+
+  Generation --> Verify
+  Validation --> Verify
+  Forecast --> Verify
+  Delay --> Verify
+  Maintenance --> Verify
+  Disruption --> Verify
+  Baseline --> Drift
+  Verify --> Compatibility --> Metrics --> Checks --> Alerts --> Health
+  Metrics --> Drift --> Health
+  Health --> Outputs --> Reports
+  Reports -. future mapping .-> Purview
+  Metrics -. future mapping .-> AzureMonitor
+  Metrics -. future mapping .-> LogAnalytics
+  Checks -. future mapping .-> AzureMonitor
+  Alerts -. future mapping .-> AzureMonitor
+  Outputs -. future mapping .-> ADX
+  Outputs -. future mapping .-> PowerBI
+  Metrics -. future mapping .-> AzureML
+  Outputs -. future mapping .-> AppInsights

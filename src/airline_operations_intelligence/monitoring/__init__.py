@@ -1,1 +1,1 @@
-"""Future monitoring and observability domain."""
+"""Local-first platform monitoring and observability evidence."""

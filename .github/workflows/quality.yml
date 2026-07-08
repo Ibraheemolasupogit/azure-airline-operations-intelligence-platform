@@ -58,5 +58,8 @@ jobs:
       - name: Score CI disruptions
         run: make score-disruptions-ci
 
+      - name: Monitor CI platform artefacts
+        run: make monitor-platform-ci
+
       - name: Clean generated CI artefacts
         run: make clean

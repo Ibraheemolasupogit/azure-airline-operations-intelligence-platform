@@ -57,6 +57,7 @@ flowchart TB
     Forecasts["Demand forecasts"]
     Evidence["Model evidence and metadata"]
     Decisions["Recovery decision support"]
+    MonitoringEvidence["Monitoring evidence<br/>(Milestone 8 local)"]
   end
 
   subgraph Consumption["Power BI, reports and GenAI operations assistant"]
@@ -100,6 +101,10 @@ flowchart TB
   Maintenance --> Scores
   Anomaly --> Evidence
   Disruption --> Decisions
+  Evidence --> MonitoringEvidence
+  Scores --> MonitoringEvidence
+  Forecasts --> MonitoringEvidence
+  Decisions --> MonitoringEvidence
   Scores --> PowerBI
   Forecasts --> PowerBI
   Evidence --> Reports
@@ -108,7 +113,7 @@ flowchart TB
   Entra -. identity .- Ingestion
   KeyVault -. secrets .- Ingestion
   Purview -. lineage .- Lake
-  Monitor -. telemetry .- Analytics
+  Monitor -. future telemetry mapping .- MonitoringEvidence
   CICD -. validation .- Quality
   ModelGov -. approvals .- Analytics
 ```

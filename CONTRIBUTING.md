@@ -22,10 +22,11 @@ make quality
 
 ## Milestone Discipline
 
-Milestone 4 adds passenger-demand forecasting only. Do not add flight-delay prediction,
-maintenance models, disruption scoring, optimisation, dashboards, Azure deployment templates,
-production monitoring, or GenAI runtime features until their roadmap milestone is active.
+Keep changes scoped to the active roadmap milestone. Milestone 8 adds local monitoring evidence
+only; do not add GenAI, dashboards, route or schedule optimisation, Azure deployment templates,
+live Azure Monitor clients, alert routing, production incident automation, or later-milestone
+runtime features until their roadmap milestone is active.
 
 Generated runs under `data/raw/`, `data/interim/`, `data/processed/`, and `reports/validation/`
-plus passenger forecasting outputs under `outputs/` and `reports/passenger_forecasting/` are local
-artefacts and must not be committed.
+plus analytics and monitoring outputs under `outputs/` and `reports/` are local artefacts and
+must not be committed.

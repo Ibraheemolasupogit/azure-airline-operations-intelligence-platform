@@ -223,3 +223,39 @@ class DisruptionOutputCollisionError(AirlineOperationsError):
 
 class DisruptionArtefactError(AirlineOperationsError):
     """Raised when disruption artefacts cannot be written or read."""
+
+
+class MonitoringConfigurationError(AirlineOperationsError):
+    """Raised when monitoring configuration is invalid."""
+
+
+class MonitoringSourceError(AirlineOperationsError):
+    """Raised when monitoring input sources cannot be used."""
+
+
+class MonitoringIntegrityError(MonitoringSourceError):
+    """Raised when monitoring source integrity checks fail."""
+
+
+class MonitoringCompatibilityError(MonitoringSourceError):
+    """Raised when monitoring inputs do not share expected lineage."""
+
+
+class MonitoringCheckError(AirlineOperationsError):
+    """Raised when monitoring checks cannot be evaluated."""
+
+
+class MonitoringDriftError(AirlineOperationsError):
+    """Raised when drift-style comparison cannot be evaluated."""
+
+
+class MonitoringAlertError(AirlineOperationsError):
+    """Raised when monitoring alerts cannot be generated."""
+
+
+class MonitoringOutputCollisionError(AirlineOperationsError):
+    """Raised when monitoring output directories already exist."""
+
+
+class MonitoringArtefactError(AirlineOperationsError):
+    """Raised when monitoring artefacts cannot be written or read."""

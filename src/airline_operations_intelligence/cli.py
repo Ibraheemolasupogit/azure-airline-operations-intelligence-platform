@@ -56,6 +56,15 @@ from airline_operations_intelligence.maintenance.config import (
 )
 from airline_operations_intelligence.maintenance.pipeline import analyse_aircraft_health
 from airline_operations_intelligence.maintenance.reporting import describe_aircraft_health_report
+from airline_operations_intelligence.monitoring.config import (
+    DEFAULT_MONITORING_CONFIG_PATH,
+    load_monitoring_config,
+)
+from airline_operations_intelligence.monitoring.config import (
+    with_overrides as with_monitoring_overrides,
+)
+from airline_operations_intelligence.monitoring.pipeline import monitor_platform
+from airline_operations_intelligence.monitoring.reporting import describe_monitoring_report
 from airline_operations_intelligence.validation.config import (
     DEFAULT_VALIDATION_CONFIG_PATH,
     load_validation_config,
@@ -109,6 +118,8 @@ REQUIRED_FILES = (
     "configs/maintenance_analytics_ci.yaml",
     "configs/disruption_scoring.yaml",
     "configs/disruption_scoring_ci.yaml",
+    "configs/monitoring.yaml",
+    "configs/monitoring_ci.yaml",
 )
 
 
@@ -498,6 +509,75 @@ def build_parser() -> argparse.ArgumentParser:
         required=True,
         help="Completed disruption scoring report directory containing disruption-scoring-manifest.json.",
     )
+
+    monitoring_parser = subparsers.add_parser(
+        "monitor-platform",
+        help="Create local monitoring and observability evidence for Milestone 8.",
+    )
+    monitoring_parser.add_argument(
+        "--generation-run-dir",
+        type=Path,
+        default=None,
+        help="Optional completed Milestone 2 generation run directory.",
+    )
+    monitoring_parser.add_argument(
+        "--validation-report-dir",
+        type=Path,
+        required=True,
+        help="Completed Milestone 3 validation report directory.",
+    )
+    monitoring_parser.add_argument(
+        "--passenger-forecast-report-dir",
+        type=Path,
+        default=None,
+        help="Optional completed Milestone 4 passenger forecast report directory.",
+    )
+    monitoring_parser.add_argument(
+        "--delay-prediction-report-dir",
+        type=Path,
+        default=None,
+        help="Optional completed Milestone 5 delay prediction report directory.",
+    )
+    monitoring_parser.add_argument(
+        "--maintenance-report-dir",
+        type=Path,
+        default=None,
+        help="Optional completed Milestone 6 maintenance analytics report directory.",
+    )
+    monitoring_parser.add_argument(
+        "--disruption-report-dir",
+        type=Path,
+        default=None,
+        help="Optional completed Milestone 7 disruption scoring report directory.",
+    )
+    monitoring_parser.add_argument(
+        "--baseline-monitoring-report-dir",
+        type=Path,
+        default=None,
+        help="Optional previous monitoring report directory for deterministic drift comparison.",
+    )
+    monitoring_parser.add_argument(
+        "--config",
+        type=Path,
+        default=DEFAULT_MONITORING_CONFIG_PATH,
+        help="Monitoring YAML configuration path.",
+    )
+    monitoring_parser.add_argument("--monitoring-run-id", type=str, default=None, help="Explicit monitoring run ID.")
+    monitoring_parser.add_argument("--output-root", type=Path, default=None, help="Override monitoring output root.")
+    monitoring_parser.add_argument("--report-root", type=Path, default=None, help="Override monitoring report root.")
+    monitoring_parser.add_argument("--seed", type=int, default=None, help="Override deterministic seed.")
+    monitoring_parser.add_argument("--overwrite", action="store_true", help="Replace existing monitoring outputs.")
+
+    describe_monitoring_parser = subparsers.add_parser(
+        "describe-monitoring",
+        help="Describe a completed monitoring run without rerunning checks.",
+    )
+    describe_monitoring_parser.add_argument(
+        "--monitoring-report-dir",
+        type=Path,
+        required=True,
+        help="Completed monitoring report directory containing monitoring-manifest.json.",
+    )
     return parser
 
 
@@ -739,6 +819,47 @@ def main(argv: Sequence[str] | None = None) -> int:
     if args.command == "describe-disruption-scoring":
         try:
             description = describe_disruption_report(args.disruption_report_dir)
+        except AirlineOperationsError as exc:
+            LOGGER.error("%s", exc)
+            return 1
+        print(description)
+        return 0
+
+    if args.command == "monitor-platform":
+        try:
+            monitoring_config = load_monitoring_config(args.config)
+            monitoring_config = with_monitoring_overrides(
+                monitoring_config,
+                output_root=args.output_root,
+                report_root=args.report_root,
+                seed=args.seed,
+                overwrite=True if args.overwrite else None,
+            )
+            monitoring_result = monitor_platform(
+                generation_run_dir=args.generation_run_dir,
+                validation_report_dir=args.validation_report_dir,
+                passenger_forecast_report_dir=args.passenger_forecast_report_dir,
+                delay_prediction_report_dir=args.delay_prediction_report_dir,
+                maintenance_report_dir=args.maintenance_report_dir,
+                disruption_report_dir=args.disruption_report_dir,
+                baseline_monitoring_report_dir=args.baseline_monitoring_report_dir,
+                config=monitoring_config,
+                monitoring_run_id=args.monitoring_run_id,
+            )
+        except AirlineOperationsError as exc:
+            LOGGER.error("%s", exc)
+            return 1
+        LOGGER.info(
+            "Monitored platform validation run %s as %s",
+            monitoring_result.source_validation_run_id,
+            monitoring_result.monitoring_run_id,
+        )
+        LOGGER.info("Row counts: %s", monitoring_result.row_counts)
+        return 0 if monitoring_result.overall_status == "passed" else 1
+
+    if args.command == "describe-monitoring":
+        try:
+            description = describe_monitoring_report(args.monitoring_report_dir)
         except AirlineOperationsError as exc:
             LOGGER.error("%s", exc)
             return 1

@@ -52,8 +52,10 @@ recommendations, and avoid autonomous operational action.
 
 ## Monitoring
 
-Will collect pipeline, data-quality, model, and application telemetry with local logs and an
-Azure Monitor and Application Insights target mapping.
+Collects local pipeline, data-quality, model-evidence, analytics, lineage, drift-style, and alert
+evidence from explicit completed artefacts. Azure Monitor, Log Analytics, Application Insights,
+Data Explorer, Microsoft Purview, Azure Machine Learning, and Power BI are documentation mappings
+only.
 
 ## Reporting
 

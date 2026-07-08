@@ -1,0 +1,50 @@
+monitoring:
+  output_root: outputs/monitoring
+  report_root: reports/monitoring
+  overwrite: false
+  seed: 42
+  accepted_statuses:
+    - passed
+    - passed_with_warnings
+    - completed
+    - succeeded
+  maximum_alerts_per_run: 200
+  enable_drift_checks: true
+  enable_model_metric_checks: true
+  enable_data_quality_checks: true
+  enable_lineage_checks: true
+  enable_runtime_checks: true
+
+thresholds:
+  validation_error_count_warning: 1
+  validation_error_count_critical: 10
+  validation_warning_count_warning: 5
+  invalid_record_rate_warning: 0.01
+  invalid_record_rate_critical: 0.05
+  checksum_failure_severity: critical
+  missing_lineage_severity: high
+  minimum_processed_row_count: 1
+  max_runtime_seconds_warning: 300
+  max_runtime_seconds_critical: 900
+  passenger_forecast_wape_warning: 0.25
+  passenger_forecast_wape_critical: 0.40
+  delay_prediction_pr_auc_warning: 0.50
+  delay_prediction_pr_auc_critical: 0.35
+  maintenance_high_risk_rate_warning: 0.20
+  disruption_severe_rate_warning: 0.25
+  drift_relative_change_warning: 0.25
+  drift_relative_change_critical: 0.50
+
+severity_policy:
+  info: 0
+  warning: 1
+  high: 2
+  critical: 3
+
+monitoring_domains:
+  generation: true
+  validation: true
+  passenger_forecasting: true
+  delay_prediction: true
+  maintenance_analytics: true
+  disruption_scoring: true
