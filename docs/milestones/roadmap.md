@@ -10,7 +10,7 @@
 | 6 - Aircraft-health and maintenance analytics | Analyse synthetic health indicators | Telemetry features, deterministic risk scoring, alerts, summaries, lineage, reports | Outputs remain decision-support and not airworthiness claims | 3 |
 | 7 - Operational disruption scoring | Quantify disruption severity | Flight-level scoring, alerts, route/airport/aircraft/daily summaries, lineage, reports | Scores are explainable and traceable to inputs | 3, 4-6 optional |
 | 8 - Monitoring and observability | Add local monitoring evidence | Manifest verification, metrics, checks, drift-style comparisons, alerts, lineage, reports | Local monitoring evidence exists and verifies explicit artefacts | 3, 7 |
-| 9 - GenAI operations assistant | Add grounded assistant workflows | Retrieval contracts, prompts, audit logs, response checks | Responses cite evidence and require human review | 7, 8 |
+| 9 - GenAI operations assistant | Add deterministic local assistant workflows | Evidence extraction, retrieval, prompt audit, template responses, guardrails, transcripts, lineage | Responses cite evidence and require human review; no live LLM calls | 7, 8 |
 | 10 - Power BI-ready analytical outputs | Publish reporting artefacts | Star-schema outputs, semantic model guidance, reports | Outputs are reproducible and documented | 7 |
 | 11 - Azure deployment architecture and infrastructure mapping | Prepare deployable Azure architecture | IaC boundaries, deployment docs, security mapping | No secrets committed; deployment plan is auditable | 8, 10 |
 | 12 - Portfolio evidence and final polish | Package final demonstration evidence | Final docs, screenshots, quality evidence, narrative | Claims match implemented evidence | 1-11 |

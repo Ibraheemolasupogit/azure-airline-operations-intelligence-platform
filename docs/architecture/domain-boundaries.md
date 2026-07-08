@@ -47,8 +47,9 @@ Recommendations must include constraints, assumptions, and human review.
 
 ## GenAI Operations Assistance
 
-Will answer operational questions from governed outputs, cite evidence, distinguish facts from
-recommendations, and avoid autonomous operational action.
+Answers controlled operational-assistant intents from governed local evidence using deterministic
+templates. It cites evidence IDs, writes prompt and transcript audit artefacts, applies guardrails,
+and avoids autonomous operational action. It does not call live LLMs or Azure AI services.
 
 ## Monitoring
 

@@ -259,3 +259,47 @@ class MonitoringOutputCollisionError(AirlineOperationsError):
 
 class MonitoringArtefactError(AirlineOperationsError):
     """Raised when monitoring artefacts cannot be written or read."""
+
+
+class GenAIAssistantConfigurationError(AirlineOperationsError):
+    """Raised when GenAI assistant configuration is invalid."""
+
+
+class GenAIAssistantSourceError(AirlineOperationsError):
+    """Raised when GenAI assistant input sources cannot be used."""
+
+
+class GenAIAssistantIntegrityError(GenAIAssistantSourceError):
+    """Raised when GenAI assistant source integrity checks fail."""
+
+
+class GenAIAssistantCompatibilityError(GenAIAssistantSourceError):
+    """Raised when GenAI assistant inputs do not share expected lineage."""
+
+
+class GenAIEvidenceError(AirlineOperationsError):
+    """Raised when structured assistant evidence cannot be extracted."""
+
+
+class GenAIRetrievalError(AirlineOperationsError):
+    """Raised when assistant retrieval cannot be completed."""
+
+
+class GenAIPromptError(AirlineOperationsError):
+    """Raised when prompt assembly cannot be completed."""
+
+
+class GenAIGuardrailError(AirlineOperationsError):
+    """Raised when assistant guardrails fail."""
+
+
+class GenAIResponseError(AirlineOperationsError):
+    """Raised when deterministic assistant response generation fails."""
+
+
+class GenAIOutputCollisionError(AirlineOperationsError):
+    """Raised when assistant output directories already exist."""
+
+
+class GenAIArtefactError(AirlineOperationsError):
+    """Raised when assistant artefacts cannot be written or read."""

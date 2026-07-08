@@ -1,1 +1,1 @@
-"""Future governed GenAI operations assistance domain."""
+"""Deterministic local GenAI-style operations assistant."""

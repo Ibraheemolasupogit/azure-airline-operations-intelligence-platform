@@ -4,10 +4,10 @@ This repository is a local-first airline operations intelligence platform mapped
 Azure services. The current implementation includes the repository foundation and governed
 synthetic aviation data generation, ingestion, validation, passenger-demand forecasting,
 flight-delay prediction, aircraft-health maintenance analytics, operational disruption scoring,
-and local monitoring evidence.
+local monitoring evidence, and a deterministic local GenAI-style operations assistant.
 
-No optimisation, GenAI assistants, dashboards, Azure infrastructure, deployment workflows, or
-live Azure monitoring integrations are implemented yet.
+No optimisation, dashboards, Azure infrastructure, deployment workflows, live Azure monitoring
+integrations, or live Azure/OpenAI model calls are implemented yet.
 
 ## Business Problem
 
@@ -183,6 +183,24 @@ python3 -m airline_operations_intelligence.cli describe-monitoring \
   --monitoring-report-dir reports/monitoring/<monitoring_run_id>
 ```
 
+Run the deterministic local operations assistant:
+
+```bash
+python3 -m airline_operations_intelligence.cli run-operations-assistant \
+  --validation-report-dir reports/validation/<validation_run_id> \
+  --monitoring-report-dir reports/monitoring/<monitoring_run_id> \
+  --disruption-report-dir reports/disruption_scoring/<disruption_run_id> \
+  --config configs/genai_assistant.yaml \
+  --intent executive_operations_brief
+```
+
+Describe a completed assistant run:
+
+```bash
+python3 -m airline_operations_intelligence.cli describe-operations-assistant \
+  --assistant-report-dir reports/genai_assistant/<assistant_run_id>
+```
+
 ## Quality Commands
 
 ```bash
@@ -200,6 +218,7 @@ make predict-flight-delays-ci  # CI-sized flight-delay prediction run
 make analyse-aircraft-health-ci  # CI-sized aircraft-health analytics run
 make score-disruptions-ci  # CI-sized disruption scoring run
 make monitor-platform-ci  # CI-sized local monitoring evidence run
+make run-operations-assistant-ci  # CI-sized local assistant run
 make quality     # Full local gate
 ```
 
@@ -209,8 +228,9 @@ Milestone 1 established the repository foundation. Milestone 2 added governed sy
 generation. Milestone 3 added governed local ingestion and validation. Milestone 4 added
 passenger-demand forecasting. Milestone 5 added flight-delay prediction. Milestone 6 added
 aircraft-health maintenance analytics. Milestone 7 added operational disruption scoring.
-Milestone 8 adds local monitoring and observability evidence. Later milestones add GenAI,
-Power BI outputs, and Azure deployment architecture.
+Milestone 8 added local monitoring and observability evidence. Milestone 9 adds a deterministic
+local GenAI-style operations assistant. Later milestones add Power BI outputs and Azure deployment
+architecture.
 
 See [roadmap](docs/milestones/roadmap.md).
 
@@ -218,5 +238,5 @@ See [roadmap](docs/milestones/roadmap.md).
 
 This repository is an analytics and decision-support demonstration. It is not an airworthiness
 system, flight-control system, safety-management system, or certified aviation operational
-system. Future GenAI outputs must be grounded in governed evidence, distinguish facts from
-recommendations, and keep humans responsible for consequential operational decisions.
+system. Assistant outputs are local deterministic templates over governed evidence; they do not
+come from live LLM calls and must keep humans responsible for consequential operational decisions.

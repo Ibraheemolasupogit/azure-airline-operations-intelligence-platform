@@ -22,11 +22,12 @@ make quality
 
 ## Milestone Discipline
 
-Keep changes scoped to the active roadmap milestone. Milestone 8 adds local monitoring evidence
-only; do not add GenAI, dashboards, route or schedule optimisation, Azure deployment templates,
-live Azure Monitor clients, alert routing, production incident automation, or later-milestone
-runtime features until their roadmap milestone is active.
+Keep changes scoped to the active roadmap milestone. Milestone 9 adds a deterministic local
+GenAI-style assistant only; do not add dashboards, route or schedule optimisation, Azure
+deployment templates, live Azure Monitor clients, OpenAI or Azure OpenAI SDKs, Azure AI Foundry
+clients, alert routing, production incident automation, or later-milestone runtime features until
+their roadmap milestone is active.
 
 Generated runs under `data/raw/`, `data/interim/`, `data/processed/`, and `reports/validation/`
-plus analytics and monitoring outputs under `outputs/` and `reports/` are local artefacts and
-must not be committed.
+plus analytics, monitoring, and assistant outputs under `outputs/` and `reports/` are local
+artefacts and must not be committed.

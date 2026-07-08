@@ -1,0 +1,41 @@
+flowchart TB
+  subgraph Inputs["Validated and monitored platform artefacts"]
+    Validation["Validation manifest and metrics"]
+    Forecast["Passenger forecast artefacts"]
+    Delay["Delay prediction artefacts"]
+    Maintenance["Maintenance analytics artefacts"]
+    Disruption["Disruption scoring artefacts"]
+    Monitoring["Monitoring artefacts"]
+  end
+
+  Verify["Manifest and checksum verification"]
+  Evidence["Structured evidence extraction"]
+  Retrieval["Deterministic retrieval and entity filtering"]
+  Prompt["Prompt audit assembly"]
+  Template["Local template response generation"]
+  Guardrails["Guardrail checks"]
+  Response["Assistant response and transcript"]
+  Reports["Manifest, lineage, governance, and evidence reports"]
+
+  subgraph FutureMapping["Future mapping only"]
+    Foundry["Azure AI Foundry"]
+    OpenAI["Azure OpenAI"]
+    PromptFlow["Prompt Flow"]
+    Monitor["Azure Monitor and Log Analytics"]
+    Purview["Microsoft Purview"]
+    PowerBI["Power BI"]
+  end
+
+  Validation --> Verify
+  Forecast --> Verify
+  Delay --> Verify
+  Maintenance --> Verify
+  Disruption --> Verify
+  Monitoring --> Verify
+  Verify --> Evidence --> Retrieval --> Prompt --> Template --> Guardrails --> Response --> Reports
+  Prompt -. future mapping .-> PromptFlow
+  Template -. future mapping .-> Foundry
+  Template -. future mapping .-> OpenAI
+  Guardrails -. future mapping .-> Monitor
+  Reports -. future mapping .-> Purview
+  Response -. future mapping .-> PowerBI

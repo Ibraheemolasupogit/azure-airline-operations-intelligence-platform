@@ -1,0 +1,51 @@
+genai_assistant:
+  output_root: outputs/genai_assistant
+  report_root: reports/genai_assistant
+  overwrite: true
+  seed: 7
+  assistant_name: local_airline_operations_assistant
+  response_mode: deterministic_template
+  maximum_context_records: 12
+  maximum_evidence_references: 10
+  maximum_response_sections: 7
+  require_evidence_for_claims: true
+  include_limitations: true
+  include_human_review_statement: true
+  include_synthetic_data_warning: true
+  redact_sensitive_fields: true
+  supported_intents:
+    - executive_operations_brief
+    - delay_investigation
+    - disruption_summary
+    - maintenance_review_brief
+    - forecast_demand_summary
+    - data_quality_brief
+    - monitoring_health_brief
+    - route_risk_brief
+    - flight_risk_brief
+
+retrieval:
+  top_k: 8
+  require_manifest_verification: true
+  include_validation_evidence: true
+  include_monitoring_evidence: true
+  include_disruption_evidence: true
+  include_delay_prediction_evidence: true
+  include_maintenance_evidence: true
+  include_passenger_forecast_evidence: true
+
+guardrails:
+  reject_unsupported_intents: true
+  prohibit_autonomous_operational_actions: true
+  prohibit_safety_critical_instructions: true
+  prohibit_real_world_claims: true
+  prohibit_personal_data: true
+  require_grounding: true
+  require_disclaimer: true
+  maximum_ungrounded_claims: 0
+
+severity_policy:
+  info: 0
+  warning: 1
+  high: 2
+  critical: 3

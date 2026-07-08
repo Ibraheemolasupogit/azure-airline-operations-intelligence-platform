@@ -47,6 +47,15 @@ from airline_operations_intelligence.forecasting.config import (
 )
 from airline_operations_intelligence.forecasting.pipeline import forecast_passenger_demand
 from airline_operations_intelligence.forecasting.reporting import describe_forecast_report
+from airline_operations_intelligence.genai.config import (
+    DEFAULT_GENAI_ASSISTANT_CONFIG_PATH,
+    load_genai_assistant_config,
+)
+from airline_operations_intelligence.genai.config import (
+    with_overrides as with_genai_assistant_overrides,
+)
+from airline_operations_intelligence.genai.pipeline import run_operations_assistant
+from airline_operations_intelligence.genai.reporting import describe_assistant_report
 from airline_operations_intelligence.maintenance.config import (
     DEFAULT_MAINTENANCE_ANALYTICS_CONFIG_PATH,
     load_maintenance_config,
@@ -120,6 +129,8 @@ REQUIRED_FILES = (
     "configs/disruption_scoring_ci.yaml",
     "configs/monitoring.yaml",
     "configs/monitoring_ci.yaml",
+    "configs/genai_assistant.yaml",
+    "configs/genai_assistant_ci.yaml",
 )
 
 
@@ -578,6 +589,40 @@ def build_parser() -> argparse.ArgumentParser:
         required=True,
         help="Completed monitoring report directory containing monitoring-manifest.json.",
     )
+
+    assistant_parser = subparsers.add_parser(
+        "run-operations-assistant",
+        help="Run the deterministic local GenAI-style operations assistant for Milestone 9.",
+    )
+    assistant_parser.add_argument("--generation-run-dir", type=Path, default=None)
+    assistant_parser.add_argument("--validation-report-dir", type=Path, required=True)
+    assistant_parser.add_argument("--passenger-forecast-report-dir", type=Path, default=None)
+    assistant_parser.add_argument("--delay-prediction-report-dir", type=Path, default=None)
+    assistant_parser.add_argument("--maintenance-report-dir", type=Path, default=None)
+    assistant_parser.add_argument("--disruption-report-dir", type=Path, default=None)
+    assistant_parser.add_argument("--monitoring-report-dir", type=Path, default=None)
+    assistant_parser.add_argument("--config", type=Path, default=DEFAULT_GENAI_ASSISTANT_CONFIG_PATH)
+    assistant_parser.add_argument("--intent", type=str, required=True)
+    assistant_parser.add_argument("--flight-id", type=str, default=None)
+    assistant_parser.add_argument("--route-id", type=str, default=None)
+    assistant_parser.add_argument("--aircraft-id", type=str, default=None)
+    assistant_parser.add_argument("--airport-code", type=str, default=None)
+    assistant_parser.add_argument("--assistant-run-id", type=str, default=None)
+    assistant_parser.add_argument("--output-root", type=Path, default=None)
+    assistant_parser.add_argument("--report-root", type=Path, default=None)
+    assistant_parser.add_argument("--seed", type=int, default=None)
+    assistant_parser.add_argument("--overwrite", action="store_true")
+
+    describe_assistant_parser = subparsers.add_parser(
+        "describe-operations-assistant",
+        help="Describe a completed operations assistant run without rerunning.",
+    )
+    describe_assistant_parser.add_argument(
+        "--assistant-report-dir",
+        type=Path,
+        required=True,
+        help="Completed assistant report directory containing assistant-run-manifest.json.",
+    )
     return parser
 
 
@@ -860,6 +905,52 @@ def main(argv: Sequence[str] | None = None) -> int:
     if args.command == "describe-monitoring":
         try:
             description = describe_monitoring_report(args.monitoring_report_dir)
+        except AirlineOperationsError as exc:
+            LOGGER.error("%s", exc)
+            return 1
+        print(description)
+        return 0
+
+    if args.command == "run-operations-assistant":
+        try:
+            assistant_config = load_genai_assistant_config(args.config)
+            assistant_config = with_genai_assistant_overrides(
+                assistant_config,
+                output_root=args.output_root,
+                report_root=args.report_root,
+                seed=args.seed,
+                overwrite=True if args.overwrite else None,
+            )
+            assistant_result = run_operations_assistant(
+                generation_run_dir=args.generation_run_dir,
+                validation_report_dir=args.validation_report_dir,
+                passenger_forecast_report_dir=args.passenger_forecast_report_dir,
+                delay_prediction_report_dir=args.delay_prediction_report_dir,
+                maintenance_report_dir=args.maintenance_report_dir,
+                disruption_report_dir=args.disruption_report_dir,
+                monitoring_report_dir=args.monitoring_report_dir,
+                config=assistant_config,
+                intent=args.intent,
+                flight_id=args.flight_id,
+                route_id=args.route_id,
+                aircraft_id=args.aircraft_id,
+                airport_code=args.airport_code,
+                assistant_run_id=args.assistant_run_id,
+            )
+        except AirlineOperationsError as exc:
+            LOGGER.error("%s", exc)
+            return 1
+        LOGGER.info(
+            "Ran operations assistant for validation run %s as %s",
+            assistant_result.source_validation_run_id,
+            assistant_result.assistant_run_id,
+        )
+        LOGGER.info("Row counts: %s", assistant_result.row_counts)
+        return 0 if assistant_result.overall_status == "passed" else 1
+
+    if args.command == "describe-operations-assistant":
+        try:
+            description = describe_assistant_report(args.assistant_report_dir)
         except AirlineOperationsError as exc:
             LOGGER.error("%s", exc)
             return 1

@@ -1,15 +1,19 @@
 # GenAI Architecture
 
-Future GenAI capabilities will be grounded in governed platform outputs and will not operate
-as autonomous aviation decision-makers.
+Milestone 9 implements a deterministic local GenAI-style assistant simulation. It is grounded in
+governed platform outputs and does not operate as an autonomous aviation decision-maker.
 
 ## Candidate Capabilities
 
-- Operations Copilot.
-- Delay Investigation Assistant.
-- Flight Disruption Summariser.
-- Executive Operations Brief.
-- Schedule Recommendation Assistant.
+- Executive operations brief.
+- Delay investigation.
+- Disruption summary.
+- Maintenance review brief.
+- Forecast demand summary.
+- Data-quality brief.
+- Monitoring health brief.
+- Route risk brief.
+- Flight risk brief.
 
 ## Required Controls
 
@@ -22,5 +26,6 @@ as autonomous aviation decision-makers.
 - Audit prompts, responses, retrieved context, model configuration, and user intent.
 - Exclude personal passenger information from prompts.
 
-The target Azure mapping is Azure AI Foundry with identity, secrets, monitoring, lineage, and
-prompt-governance controls integrated from the broader platform architecture.
+The current implementation uses deterministic local templates only. The target Azure mapping is
+Azure AI Foundry or Azure OpenAI with identity, secrets, monitoring, lineage, and prompt-governance
+controls integrated from the broader platform architecture in a later milestone.

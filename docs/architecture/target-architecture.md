@@ -58,6 +58,7 @@ flowchart TB
     Evidence["Model evidence and metadata"]
     Decisions["Recovery decision support"]
     MonitoringEvidence["Monitoring evidence<br/>(Milestone 8 local)"]
+    AssistantEvidence["Assistant evidence<br/>(Milestone 9 local)"]
   end
 
   subgraph Consumption["Power BI, reports and GenAI operations assistant"]
@@ -105,10 +106,12 @@ flowchart TB
   Scores --> MonitoringEvidence
   Forecasts --> MonitoringEvidence
   Decisions --> MonitoringEvidence
+  MonitoringEvidence --> AssistantEvidence
+  Decisions --> AssistantEvidence
   Scores --> PowerBI
   Forecasts --> PowerBI
   Evidence --> Reports
-  Decisions --> GenAI
+  AssistantEvidence --> GenAI
   Evidence --> GenAI
   Entra -. identity .- Ingestion
   KeyVault -. secrets .- Ingestion

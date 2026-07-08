@@ -5,8 +5,8 @@
 This repository currently contains local synthetic data generation, governed local ingestion and
 validation, passenger-demand forecasting, flight-delay prediction, aircraft-health maintenance
 analytics, operational disruption scoring, and local monitoring evidence. It does not contain real
-airline data, personal data, credentials, deployed Azure resources, or committed generated
-operational outputs.
+airline data, personal data, credentials, deployed Azure resources, live LLM clients, or committed
+generated operational outputs.
 
 ## Reporting Security Issues
 
@@ -26,5 +26,5 @@ threads. Include the affected files, expected impact, and reproduction steps whe
 The platform is an analytics and decision-support demonstration. It is not an airworthiness
 system, flight-control system, safety-management system, certified aviation operational system, or
 live production monitoring system. Forecasts, predictions, maintenance scores, disruption scores,
-and monitoring alerts are synthetic evaluation artefacts and are not autonomous operational
-instructions.
+monitoring alerts, and assistant responses are synthetic evaluation artefacts and are not
+autonomous operational instructions.

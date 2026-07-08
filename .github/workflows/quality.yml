@@ -61,5 +61,8 @@ jobs:
       - name: Monitor CI platform artefacts
         run: make monitor-platform-ci
 
+      - name: Run CI operations assistant
+        run: make run-operations-assistant-ci
+
       - name: Clean generated CI artefacts
         run: make clean
