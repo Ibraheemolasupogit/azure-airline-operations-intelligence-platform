@@ -13,6 +13,15 @@ from airline_operations_intelligence.common.exceptions import (
     RepositoryValidationError,
 )
 from airline_operations_intelligence.common.logging import configure_logging, get_logger
+from airline_operations_intelligence.dashboard.config import (
+    DEFAULT_DASHBOARD_CONFIG_PATH,
+    load_dashboard_config,
+)
+from airline_operations_intelligence.dashboard.config import (
+    with_overrides as with_dashboard_overrides,
+)
+from airline_operations_intelligence.dashboard.pipeline import build_dashboard_outputs
+from airline_operations_intelligence.dashboard.reporting import describe_dashboard_report
 from airline_operations_intelligence.data_generation.config import (
     DEFAULT_GENERATION_CONFIG_PATH,
     load_generation_config,
@@ -131,6 +140,8 @@ REQUIRED_FILES = (
     "configs/monitoring_ci.yaml",
     "configs/genai_assistant.yaml",
     "configs/genai_assistant_ci.yaml",
+    "configs/dashboard_outputs.yaml",
+    "configs/dashboard_outputs_ci.yaml",
 )
 
 
@@ -623,6 +634,36 @@ def build_parser() -> argparse.ArgumentParser:
         required=True,
         help="Completed assistant report directory containing assistant-run-manifest.json.",
     )
+
+    dashboard_parser = subparsers.add_parser(
+        "build-dashboard-outputs",
+        help="Build local Power BI-ready dashboard outputs for Milestone 10.",
+    )
+    dashboard_parser.add_argument("--generation-run-dir", type=Path, default=None)
+    dashboard_parser.add_argument("--validation-report-dir", type=Path, required=True)
+    dashboard_parser.add_argument("--passenger-forecast-report-dir", type=Path, default=None)
+    dashboard_parser.add_argument("--delay-prediction-report-dir", type=Path, default=None)
+    dashboard_parser.add_argument("--maintenance-report-dir", type=Path, default=None)
+    dashboard_parser.add_argument("--disruption-report-dir", type=Path, required=True)
+    dashboard_parser.add_argument("--monitoring-report-dir", type=Path, required=True)
+    dashboard_parser.add_argument("--assistant-report-dir", type=Path, default=None)
+    dashboard_parser.add_argument("--config", type=Path, default=DEFAULT_DASHBOARD_CONFIG_PATH)
+    dashboard_parser.add_argument("--dashboard-run-id", type=str, default=None)
+    dashboard_parser.add_argument("--output-root", type=Path, default=None)
+    dashboard_parser.add_argument("--report-root", type=Path, default=None)
+    dashboard_parser.add_argument("--seed", type=int, default=None)
+    dashboard_parser.add_argument("--overwrite", action="store_true")
+
+    describe_dashboard_parser = subparsers.add_parser(
+        "describe-dashboard-outputs",
+        help="Describe completed dashboard outputs without rebuilding.",
+    )
+    describe_dashboard_parser.add_argument(
+        "--dashboard-report-dir",
+        type=Path,
+        required=True,
+        help="Completed dashboard report directory containing dashboard-output-manifest.json.",
+    )
     return parser
 
 
@@ -951,6 +992,48 @@ def main(argv: Sequence[str] | None = None) -> int:
     if args.command == "describe-operations-assistant":
         try:
             description = describe_assistant_report(args.assistant_report_dir)
+        except AirlineOperationsError as exc:
+            LOGGER.error("%s", exc)
+            return 1
+        print(description)
+        return 0
+
+    if args.command == "build-dashboard-outputs":
+        try:
+            dashboard_config = load_dashboard_config(args.config)
+            dashboard_config = with_dashboard_overrides(
+                dashboard_config,
+                output_root=args.output_root,
+                report_root=args.report_root,
+                seed=args.seed,
+                overwrite=True if args.overwrite else None,
+            )
+            dashboard_result = build_dashboard_outputs(
+                generation_run_dir=args.generation_run_dir,
+                validation_report_dir=args.validation_report_dir,
+                passenger_forecast_report_dir=args.passenger_forecast_report_dir,
+                delay_prediction_report_dir=args.delay_prediction_report_dir,
+                maintenance_report_dir=args.maintenance_report_dir,
+                disruption_report_dir=args.disruption_report_dir,
+                monitoring_report_dir=args.monitoring_report_dir,
+                assistant_report_dir=args.assistant_report_dir,
+                config=dashboard_config,
+                dashboard_run_id=args.dashboard_run_id,
+            )
+        except AirlineOperationsError as exc:
+            LOGGER.error("%s", exc)
+            return 1
+        LOGGER.info(
+            "Built dashboard outputs for validation run %s as %s",
+            dashboard_result.source_validation_run_id,
+            dashboard_result.dashboard_run_id,
+        )
+        LOGGER.info("Row counts: %s", dashboard_result.row_counts)
+        return 0 if dashboard_result.overall_status == "passed" else 1
+
+    if args.command == "describe-dashboard-outputs":
+        try:
+            description = describe_dashboard_report(args.dashboard_report_dir)
         except AirlineOperationsError as exc:
             LOGGER.error("%s", exc)
             return 1

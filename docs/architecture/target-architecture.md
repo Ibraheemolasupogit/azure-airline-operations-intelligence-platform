@@ -59,6 +59,7 @@ flowchart TB
     Decisions["Recovery decision support"]
     MonitoringEvidence["Monitoring evidence<br/>(Milestone 8 local)"]
     AssistantEvidence["Assistant evidence<br/>(Milestone 9 local)"]
+    DashboardEvidence["Dashboard outputs<br/>(Milestone 10 local)"]
   end
 
   subgraph Consumption["Power BI, reports and GenAI operations assistant"]
@@ -108,8 +109,13 @@ flowchart TB
   Decisions --> MonitoringEvidence
   MonitoringEvidence --> AssistantEvidence
   Decisions --> AssistantEvidence
-  Scores --> PowerBI
-  Forecasts --> PowerBI
+  Scores --> DashboardEvidence
+  Forecasts --> DashboardEvidence
+  Evidence --> DashboardEvidence
+  MonitoringEvidence --> DashboardEvidence
+  AssistantEvidence --> DashboardEvidence
+  DashboardEvidence --> PowerBI
+  DashboardEvidence --> Reports
   Evidence --> Reports
   AssistantEvidence --> GenAI
   Evidence --> GenAI

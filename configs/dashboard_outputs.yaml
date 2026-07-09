@@ -1,0 +1,37 @@
+dashboard_outputs:
+  output_root: dashboard/outputs
+  report_root: reports/dashboard_outputs
+  overwrite: false
+  seed: 42
+  export_format:
+    - csv
+    - json
+  include_powerbi_model_spec: true
+  include_measure_catalogue: true
+  include_page_specs: true
+  include_data_dictionary: true
+  maximum_example_records: 20
+
+input_options:
+  require_disruption_input: true
+  require_monitoring_input: true
+  use_passenger_forecast: true
+  use_delay_prediction: true
+  use_maintenance_analytics: true
+  use_genai_assistant: true
+
+semantic_model:
+  model_name: Airline Operations Intelligence
+  date_table_start: "2025-01-01"
+  date_table_end: "2025-12-31"
+  currency_code: GBP
+  timezone: UTC
+  surrogate_key_prefix: SK
+  unknown_member_label: Unknown
+
+kpi_thresholds:
+  high_delay_rate: 0.25
+  severe_disruption_rate: 0.20
+  high_maintenance_risk_rate: 0.20
+  validation_invalid_rate_warning: 0.01
+  monitoring_alert_rate_warning: 0.10

@@ -5,9 +5,13 @@ Azure services. The current implementation includes the repository foundation an
 synthetic aviation data generation, ingestion, validation, passenger-demand forecasting,
 flight-delay prediction, aircraft-health maintenance analytics, operational disruption scoring,
 local monitoring evidence, and a deterministic local GenAI-style operations assistant.
+Milestone 10 also produces local Power BI-ready analytical outputs, semantic model guidance,
+measure catalogues, page specifications, data dictionaries, quality evidence, lineage, and
+reports.
 
-No optimisation, dashboards, Azure infrastructure, deployment workflows, live Azure monitoring
-integrations, or live Azure/OpenAI model calls are implemented yet.
+No optimisation, live dashboards, Azure infrastructure, deployment workflows, live Azure
+monitoring integrations, live Power BI/Fabric publishing, or live Azure/OpenAI model calls are
+implemented yet.
 
 ## Business Problem
 

@@ -4,9 +4,10 @@
 
 This repository currently contains local synthetic data generation, governed local ingestion and
 validation, passenger-demand forecasting, flight-delay prediction, aircraft-health maintenance
-analytics, operational disruption scoring, and local monitoring evidence. It does not contain real
-airline data, personal data, credentials, deployed Azure resources, live LLM clients, or committed
-generated operational outputs.
+analytics, operational disruption scoring, local monitoring evidence, and local dashboard-ready
+exports. It does not contain real airline data, personal data, credentials, deployed Azure
+resources, live LLM clients, Power BI/Fabric publishing clients, or committed generated
+operational outputs.
 
 ## Reporting Security Issues
 
@@ -20,6 +21,8 @@ threads. Include the affected files, expected impact, and reproduction steps whe
 - Use `.env.example` only for placeholder variable names and comments.
 - Future Azure implementations must use Microsoft Entra ID, managed identities where possible,
   and Azure Key Vault for secrets.
+- Dashboard outputs must remain local and must not introduce Power BI, Fabric, Azure, OpenAI, or
+  external-service credentials or API clients.
 
 ## Aviation Boundary
 

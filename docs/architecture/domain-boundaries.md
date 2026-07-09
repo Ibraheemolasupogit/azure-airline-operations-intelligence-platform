@@ -60,5 +60,13 @@ only.
 
 ## Reporting
 
-Will produce operational reports and Power BI-ready outputs from curated datasets and model
-evidence, not from raw or private implementation details.
+Produces operational reports and Power BI-ready outputs from governed datasets and model evidence,
+not from raw or private implementation details.
+
+## Dashboard Outputs
+
+Consumes explicit completed validation, analytics, monitoring, and optional assistant artefacts.
+It verifies manifests and checksums, rejects incompatible lineage, and produces local analytical
+tables, KPI summaries, semantic-model documentation, measure catalogues, page specs, data
+dictionaries, lineage, and reports. It does not publish to Power BI or Fabric and does not call
+Azure, Power BI, Fabric, OpenAI, or external APIs.

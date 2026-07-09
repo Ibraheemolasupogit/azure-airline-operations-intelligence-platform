@@ -64,5 +64,8 @@ jobs:
       - name: Run CI operations assistant
         run: make run-operations-assistant-ci
 
+      - name: Build CI dashboard outputs
+        run: make build-dashboard-outputs-ci
+
       - name: Clean generated CI artefacts
         run: make clean

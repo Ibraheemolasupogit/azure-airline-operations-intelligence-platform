@@ -303,3 +303,35 @@ class GenAIOutputCollisionError(AirlineOperationsError):
 
 class GenAIArtefactError(AirlineOperationsError):
     """Raised when assistant artefacts cannot be written or read."""
+
+
+class DashboardConfigurationError(AirlineOperationsError):
+    """Raised when dashboard-output configuration is invalid."""
+
+
+class DashboardSourceError(AirlineOperationsError):
+    """Raised when dashboard-output input sources cannot be used."""
+
+
+class DashboardIntegrityError(DashboardSourceError):
+    """Raised when dashboard source manifests or checksums fail verification."""
+
+
+class DashboardCompatibilityError(DashboardSourceError):
+    """Raised when dashboard sources do not share expected lineage."""
+
+
+class DashboardTransformationError(AirlineOperationsError):
+    """Raised when dashboard analytical tables cannot be built."""
+
+
+class DashboardQualityError(AirlineOperationsError):
+    """Raised when dashboard-output quality checks fail."""
+
+
+class DashboardOutputCollisionError(AirlineOperationsError):
+    """Raised when dashboard output directories already exist."""
+
+
+class DashboardArtefactError(AirlineOperationsError):
+    """Raised when dashboard artefacts cannot be written or read."""

@@ -44,6 +44,8 @@ outputs/maintenance_analytics/*
 outputs/disruption_scoring/*
 outputs/monitoring/*
 outputs/genai_assistant/*
+dashboard/outputs/*
+reports/dashboard_outputs/*
 *.log
 data/raw/.*.tmp/
 data/interim/.*.tmp/
@@ -63,6 +65,8 @@ outputs/maintenance_analytics/.*.tmp/
 outputs/disruption_scoring/.*.tmp/
 outputs/monitoring/.*.tmp/
 outputs/genai_assistant/.*.tmp/
+dashboard/outputs/.*.tmp/
+reports/dashboard_outputs/.*.tmp/
 models/
 mlruns/
 !data/raw/.gitkeep
@@ -70,6 +74,7 @@ mlruns/
 !data/processed/.gitkeep
 !outputs/.gitkeep
 !reports/.gitkeep
+!dashboard/.gitkeep
 
 # Infrastructure state for later milestones
 .terraform/
