@@ -9,3 +9,7 @@ subscription IDs, tenant IDs, endpoints, or deployment instructions.
 
 The Bicep and Terraform folders describe target-state resource boundaries for Milestone 11 Azure
 architecture mapping. They are documentation artefacts, not deployment automation.
+
+Milestone 12 portfolio evidence may reference these files as target-state architecture examples.
+That reference does not change their boundary: no deployment commands, backend state, credentials,
+tenant IDs, subscription IDs, or live Azure resources are included.

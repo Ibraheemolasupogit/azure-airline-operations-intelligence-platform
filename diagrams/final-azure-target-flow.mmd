@@ -1,0 +1,17 @@
+flowchart LR
+    eventhubs["Azure Event Hubs"] --> adlsraw["ADLS Gen2 raw"]
+    datafactory["Azure Data Factory"] --> adlsraw
+    adlsraw --> validation["Validation and quality controls"]
+    validation --> adlscurated["ADLS Gen2 curated zones"]
+    adlscurated --> aml["Azure Machine Learning"]
+    adlscurated --> adx["Azure Data Explorer"]
+    aml --> monitor["Azure Monitor and Log Analytics"]
+    adx --> monitor
+    aml --> foundry["Azure AI Foundry target pattern"]
+    foundry --> contentsafety["AI Content Safety target control"]
+    adlscurated --> fabric["Microsoft Fabric Lakehouse"]
+    fabric --> powerbi["Power BI target consumption"]
+    purview["Microsoft Purview"] -. lineage and catalog .-> adlscurated
+    entra["Microsoft Entra ID"] -. identity .-> validation
+    keyvault["Azure Key Vault"] -. secret management .-> validation
+    note["Reference-only mapping: no resources provisioned"] -. boundary .-> eventhubs

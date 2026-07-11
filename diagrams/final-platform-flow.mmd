@@ -1,0 +1,23 @@
+flowchart LR
+    sources["Synthetic aviation sources"] --> raw["Raw data zone"]
+    raw --> validation["Governed validation"]
+    validation --> processed["Processed data zone"]
+    processed --> forecast["Passenger forecasting"]
+    processed --> delay["Flight-delay prediction"]
+    processed --> maintenance["Maintenance analytics"]
+    processed --> disruption["Disruption scoring"]
+    forecast --> monitoring["Local monitoring"]
+    delay --> monitoring
+    maintenance --> monitoring
+    disruption --> monitoring
+    monitoring --> assistant["Deterministic assistant"]
+    forecast --> dashboard["Dashboard-ready outputs"]
+    delay --> dashboard
+    maintenance --> dashboard
+    disruption --> dashboard
+    monitoring --> dashboard
+    assistant --> dashboard
+    dashboard --> azure["Azure target-state mapping"]
+    validation -. lineage .-> evidence["Manifest, checksums, reports"]
+    monitoring -. checks .-> evidence
+    dashboard -. data dictionary .-> evidence

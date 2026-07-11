@@ -1,0 +1,17 @@
+flowchart TD
+    config["YAML config"] --> generation["Synthetic generation"]
+    generation --> manifest["Manifest and checksums"]
+    generation --> dictionary["Data dictionary"]
+    manifest --> validation["Validation reports"]
+    validation --> processed["Processed datasets"]
+    processed --> analytics["Forecast, delay, maintenance, disruption outputs"]
+    analytics --> monitoring["Monitoring evidence"]
+    monitoring --> assistant["Assistant evidence and transcript"]
+    analytics --> dashboard["Dashboard export evidence"]
+    assistant --> dashboard
+    dashboard --> portfolio["Portfolio evidence pack"]
+    validation --> portfolio
+    monitoring --> portfolio
+    azure["Azure target-state docs"] --> portfolio
+    governance["Responsible-use and governance docs"] --> portfolio
+    quality["make quality and CI"] --> portfolio

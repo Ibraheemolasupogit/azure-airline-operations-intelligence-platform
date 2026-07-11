@@ -9,4 +9,6 @@ Azure governance maps existing local evidence controls to target-state cloud con
 - Diagnostic settings map to Log Analytics and audit evidence.
 - Purview collections map to environment, data-zone, and domain boundaries.
 
-This governance layer is documentation only in Milestone 11.
+This governance layer is documentation only. The final portfolio evidence pack and readiness
+validator cross-link this boundary so reviewers can distinguish implemented local evidence from
+Azure target-state design.

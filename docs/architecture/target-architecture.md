@@ -2,7 +2,12 @@
 
 The target state is a local-first implementation with clean deployment boundaries for Azure.
 Local folders, producers, configuration, ingestion, and validation interfaces represent Azure
-services until later milestones introduce cloud deployments.
+service responsibilities for architecture discussion. Cloud deployment remains outside the current
+repository scope.
+
+For the final portfolio narrative, see
+[final platform architecture](final-platform-architecture.md). Azure references in this repository
+remain target-state mappings only; no Azure resources are provisioned by the local quality gate.
 
 ```mermaid
 flowchart TB

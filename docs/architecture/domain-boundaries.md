@@ -77,3 +77,9 @@ Documents the target-state Azure architecture for implemented local capabilities
 mapping, data-zone mapping, environment strategy, security, governance, MLOps, GenAI, monitoring,
 dashboard consumption, and reference-only infrastructure skeletons. It does not deploy resources
 or introduce live cloud clients.
+
+## Portfolio Evidence
+
+Milestone 12 keeps these boundaries unchanged. The final portfolio evidence links documentation,
+quality gates, and Azure target-state mapping, but it does not add runtime functionality,
+deployment automation, credentials, or live integrations.

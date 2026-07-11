@@ -1,6 +1,6 @@
 PYTHON ?= python3
 
-.PHONY: install format lint typecheck test docs-check yaml-check validate validate-azure-architecture generate-data-ci validate-data-ci forecast-passenger-demand-ci predict-flight-delays-ci analyse-aircraft-health-ci score-disruptions-ci monitor-platform-ci run-operations-assistant-ci build-dashboard-outputs-ci test-data-generation test-ingestion-validation test-passenger-forecasting test-delay-prediction test-maintenance-analytics test-disruption-scoring test-monitoring test-genai-assistant test-dashboard-outputs test-azure-architecture describe-validation-ci describe-passenger-forecast-ci describe-delay-prediction-ci describe-aircraft-health-ci describe-disruption-scoring-ci describe-monitoring-ci describe-operations-assistant-ci describe-dashboard-outputs-ci quality clean
+.PHONY: install format lint typecheck test docs-check yaml-check validate validate-azure-architecture validate-portfolio-readiness generate-data-ci validate-data-ci forecast-passenger-demand-ci predict-flight-delays-ci analyse-aircraft-health-ci score-disruptions-ci monitor-platform-ci run-operations-assistant-ci build-dashboard-outputs-ci test-data-generation test-ingestion-validation test-passenger-forecasting test-delay-prediction test-maintenance-analytics test-disruption-scoring test-monitoring test-genai-assistant test-dashboard-outputs test-azure-architecture test-portfolio-readiness describe-validation-ci describe-passenger-forecast-ci describe-delay-prediction-ci describe-aircraft-health-ci describe-disruption-scoring-ci describe-monitoring-ci describe-operations-assistant-ci describe-dashboard-outputs-ci quality clean
 
 install:
 	$(PYTHON) -m pip install --upgrade pip
@@ -31,6 +31,9 @@ validate:
 
 validate-azure-architecture:
 	$(PYTHON) scripts/validate_azure_architecture.py
+
+validate-portfolio-readiness:
+	$(PYTHON) scripts/validate_portfolio_readiness.py
 
 generate-data-ci:
 	$(PYTHON) -m airline_operations_intelligence.cli generate-data --config configs/data_generation_ci.yaml --run-id ci-quality --overwrite
@@ -89,6 +92,9 @@ test-dashboard-outputs:
 test-azure-architecture:
 	$(PYTHON) -m pytest tests/unit/test_azure_architecture_mapping.py tests/integration/test_azure_architecture_static.py
 
+test-portfolio-readiness:
+	$(PYTHON) -m pytest tests/unit/test_portfolio_readiness.py
+
 describe-validation-ci:
 	$(PYTHON) -m airline_operations_intelligence.cli describe-validation --report-dir reports/validation/ci-quality
 
@@ -113,7 +119,7 @@ describe-operations-assistant-ci:
 describe-dashboard-outputs-ci:
 	$(PYTHON) -m airline_operations_intelligence.cli describe-dashboard-outputs --dashboard-report-dir reports/dashboard_outputs/ci-quality
 
-quality: lint typecheck test docs-check yaml-check validate validate-azure-architecture generate-data-ci validate-data-ci forecast-passenger-demand-ci predict-flight-delays-ci analyse-aircraft-health-ci score-disruptions-ci monitor-platform-ci run-operations-assistant-ci build-dashboard-outputs-ci clean
+quality: lint typecheck test docs-check yaml-check validate validate-azure-architecture validate-portfolio-readiness generate-data-ci validate-data-ci forecast-passenger-demand-ci predict-flight-delays-ci analyse-aircraft-health-ci score-disruptions-ci monitor-platform-ci run-operations-assistant-ci build-dashboard-outputs-ci clean
 
 clean:
 	rm -rf .mypy_cache .pytest_cache .ruff_cache build dist *.egg-info data/raw/ci-quality data/raw/.ci-quality.tmp data/interim/ci-quality data/interim/.ci-quality.tmp data/processed/ci-quality data/processed/.ci-quality.tmp reports/validation/ci-quality reports/validation/.ci-quality.tmp outputs/passenger_forecasting/ci-quality outputs/passenger_forecasting/.ci-quality.tmp outputs/models/passenger_forecasting/ci-quality outputs/models/passenger_forecasting/.ci-quality.tmp reports/passenger_forecasting/ci-quality reports/passenger_forecasting/.ci-quality.tmp outputs/delay_prediction/ci-quality outputs/delay_prediction/.ci-quality.tmp outputs/models/delay_prediction/ci-quality outputs/models/delay_prediction/.ci-quality.tmp reports/delay_prediction/ci-quality reports/delay_prediction/.ci-quality.tmp outputs/maintenance_analytics/ci-quality outputs/maintenance_analytics/.ci-quality.tmp reports/maintenance_analytics/ci-quality reports/maintenance_analytics/.ci-quality.tmp outputs/disruption_scoring/ci-quality outputs/disruption_scoring/.ci-quality.tmp reports/disruption_scoring/ci-quality reports/disruption_scoring/.ci-quality.tmp outputs/monitoring/ci-quality outputs/monitoring/.ci-quality.tmp reports/monitoring/ci-quality reports/monitoring/.ci-quality.tmp outputs/genai_assistant/ci-quality outputs/genai_assistant/.ci-quality.tmp reports/genai_assistant/ci-quality reports/genai_assistant/.ci-quality.tmp dashboard/outputs/ci-quality dashboard/outputs/.ci-quality.tmp reports/dashboard_outputs/ci-quality reports/dashboard_outputs/.ci-quality.tmp

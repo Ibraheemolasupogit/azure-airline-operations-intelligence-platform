@@ -8,7 +8,7 @@ analytics, operational disruption scoring, local monitoring evidence, and local 
 exports. It does not contain real airline data, personal data, credentials, deployed Azure
 resources, live LLM clients, Power BI/Fabric publishing clients, or committed generated
 operational outputs. Milestone 11 reference infrastructure files are non-deploying architecture
-examples only.
+examples only. Milestone 12 portfolio evidence is documentation and static validation only.
 
 ## Reporting Security Issues
 
@@ -34,3 +34,9 @@ system, flight-control system, safety-management system, certified aviation oper
 live production monitoring system. Forecasts, predictions, maintenance scores, disruption scores,
 monitoring alerts, and assistant responses are synthetic evaluation artefacts and are not
 autonomous operational instructions.
+
+## Portfolio Boundary
+
+Azure, OpenAI, Fabric, and Power BI content is target-state documentation unless a future,
+separately reviewed scope explicitly implements a live integration. Do not add credentials,
+deployment commands, Terraform state, real endpoints, or generated runtime artefacts to commits.

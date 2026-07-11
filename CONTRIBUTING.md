@@ -22,11 +22,11 @@ make quality
 
 ## Milestone Discipline
 
-Keep changes scoped to the active roadmap milestone. Milestone 11 adds Azure target-state
-architecture mapping and reference-only infrastructure skeletons only; do not add route or
+Keep changes scoped to the active roadmap milestone. Milestone 12 finalises portfolio evidence,
+documentation, diagrams, readiness validation, and repository polish only. Do not add route or
 schedule optimisation, live Azure deployment workflows, Azure SDK clients, Power BI or Fabric
 publishing clients, OpenAI or Azure OpenAI SDKs, alert routing, production incident automation, or
-Milestone 12 portfolio polish until their roadmap milestone is active.
+new post-Milestone-12 functionality.
 
 Generated runs under `data/raw/`, `data/interim/`, `data/processed/`, and `reports/validation/`
 plus analytics, monitoring, and assistant outputs under `outputs/` and `reports/` are local
@@ -35,3 +35,6 @@ artefacts and must not be committed. Generated dashboard outputs under `dashboar
 
 Run `make validate-azure-architecture` when changing Azure architecture docs, mapping config, or
 reference infrastructure skeletons.
+
+Run `make validate-portfolio-readiness` when changing README, portfolio docs, diagrams, roadmap,
+Makefile, CI, or generated-output policies.

@@ -37,3 +37,7 @@ Later milestones may map this workflow to Azure Machine Learning data assets, co
 experiment tracking, registry candidates, Azure Monitor metrics, Log Analytics tables, and
 Microsoft Purview lineage. No Azure ML registration, endpoints, credentials, Azure Monitor clients,
 OpenAI SDKs, model endpoints, or cloud resources are created in Milestones 4 through 9.
+
+Milestone 12 adds final portfolio evidence only. It does not change model behaviour, register
+models, deploy endpoints, introduce optimisation, or grant model outputs operational decision
+authority.
