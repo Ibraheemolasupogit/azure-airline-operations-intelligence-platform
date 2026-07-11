@@ -40,6 +40,9 @@ jobs:
       - name: Validate repository
         run: make validate
 
+      - name: Validate Azure architecture mapping
+        run: make validate-azure-architecture
+
       - name: Generate CI synthetic data
         run: make generate-data-ci
 

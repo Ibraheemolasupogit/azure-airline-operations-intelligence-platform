@@ -1,0 +1,50 @@
+flowchart LR
+  subgraph Curated["Curated data and evidence"]
+    Processed["Processed operational data"]
+    Reports["Governed reports"]
+    Dashboard["Dashboard outputs"]
+  end
+
+  subgraph MLOps["Azure Machine Learning mapping"]
+    Forecast["Passenger forecast batch job"]
+    Delay["Delay prediction batch job"]
+    Maintenance["Maintenance risk scoring job"]
+    Disruption["Disruption scoring job"]
+    Registry["Model registry candidates"]
+    Evidence["Model evidence storage"]
+  end
+
+  subgraph GenAI["Azure AI Foundry mapping"]
+    Retrieval["Grounded retrieval over governed artefacts"]
+    PromptFlow["Prompt Flow design"]
+    OpenAI["Future Azure OpenAI model boundary"]
+    Safety["Content safety guardrails"]
+    Transcript["Prompt and response audit"]
+  end
+
+  subgraph Monitoring["Monitoring mapping"]
+    Metrics["Monitoring metrics"]
+    Checks["Quality and lineage checks"]
+    Alerts["Human-review alert evidence"]
+    Logs["Log Analytics"]
+    Explorer["Azure Data Explorer"]
+  end
+
+  subgraph Consumption["Power BI and Fabric"]
+    Fabric["Fabric Lakehouse or Warehouse"]
+    PowerBI["Power BI reports"]
+  end
+
+  Processed --> Forecast --> Registry
+  Processed --> Delay --> Registry
+  Processed --> Maintenance --> Evidence
+  Processed --> Disruption --> Evidence
+  Registry --> Evidence
+  Reports --> Retrieval
+  Dashboard --> Retrieval
+  Retrieval --> PromptFlow --> OpenAI --> Safety --> Transcript
+  Evidence --> Metrics
+  Reports --> Checks
+  Checks --> Alerts --> Logs --> Explorer
+  Dashboard --> Fabric --> PowerBI
+  Metrics --> PowerBI

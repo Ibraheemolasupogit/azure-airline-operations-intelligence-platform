@@ -8,10 +8,13 @@ local monitoring evidence, and a deterministic local GenAI-style operations assi
 Milestone 10 also produces local Power BI-ready analytical outputs, semantic model guidance,
 measure catalogues, page specifications, data dictionaries, quality evidence, lineage, and
 reports.
+Milestone 11 adds Azure target-state architecture and infrastructure mapping documentation,
+reference-only infrastructure skeletons, static safety checks, and architecture evidence.
 
 No optimisation, live dashboards, Azure infrastructure, deployment workflows, live Azure
 monitoring integrations, live Power BI/Fabric publishing, or live Azure/OpenAI model calls are
 implemented yet.
+No Azure resources are provisioned by this repository.
 
 ## Business Problem
 

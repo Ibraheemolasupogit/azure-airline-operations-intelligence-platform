@@ -70,3 +70,10 @@ It verifies manifests and checksums, rejects incompatible lineage, and produces 
 tables, KPI summaries, semantic-model documentation, measure catalogues, page specs, data
 dictionaries, lineage, and reports. It does not publish to Power BI or Fabric and does not call
 Azure, Power BI, Fabric, OpenAI, or external APIs.
+
+## Azure Architecture Mapping
+
+Documents the target-state Azure architecture for implemented local capabilities. It owns service
+mapping, data-zone mapping, environment strategy, security, governance, MLOps, GenAI, monitoring,
+dashboard consumption, and reference-only infrastructure skeletons. It does not deploy resources
+or introduce live cloud clients.

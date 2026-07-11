@@ -1,0 +1,44 @@
+flowchart LR
+  subgraph Local["Local repository paths"]
+    LRaw["data/raw"]
+    LInterim["data/interim"]
+    LProcessed["data/processed"]
+    LOutputs["outputs"]
+    LReports["reports"]
+    LDashboard["dashboard/outputs"]
+  end
+
+  subgraph AzureZones["Target Azure data zones"]
+    Raw["ADLS Gen2 raw container"]
+    Interim["ADLS Gen2 interim and quarantine container"]
+    Processed["ADLS Gen2 processed container"]
+    Analytics["ADLS Gen2 analytics container"]
+    Evidence["ADLS Gen2 evidence container"]
+    Dashboard["Fabric or Power BI dashboard tables"]
+  end
+
+  subgraph Governance["Lineage and controls"]
+    Manifests["Run manifests and checksums"]
+    Purview["Microsoft Purview lineage"]
+    RBAC["Zone-specific RBAC"]
+    Retention["Retention policies"]
+  end
+
+  LRaw --> Raw
+  LInterim --> Interim
+  LProcessed --> Processed
+  LOutputs --> Analytics
+  LReports --> Evidence
+  LDashboard --> Dashboard
+  Raw --> Manifests
+  Interim --> Manifests
+  Processed --> Manifests
+  Analytics --> Manifests
+  Evidence --> Manifests
+  Dashboard --> Manifests
+  Manifests --> Purview
+  RBAC --> Raw
+  RBAC --> Processed
+  RBAC --> Analytics
+  Retention --> Evidence
+  Retention --> Dashboard

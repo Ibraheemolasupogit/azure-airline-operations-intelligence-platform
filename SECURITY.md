@@ -7,7 +7,8 @@ validation, passenger-demand forecasting, flight-delay prediction, aircraft-heal
 analytics, operational disruption scoring, local monitoring evidence, and local dashboard-ready
 exports. It does not contain real airline data, personal data, credentials, deployed Azure
 resources, live LLM clients, Power BI/Fabric publishing clients, or committed generated
-operational outputs.
+operational outputs. Milestone 11 reference infrastructure files are non-deploying architecture
+examples only.
 
 ## Reporting Security Issues
 
@@ -23,6 +24,8 @@ threads. Include the affected files, expected impact, and reproduction steps whe
   and Azure Key Vault for secrets.
 - Dashboard outputs must remain local and must not introduce Power BI, Fabric, Azure, OpenAI, or
   external-service credentials or API clients.
+- Azure architecture mapping must not include real tenant IDs, subscription IDs, client IDs,
+  endpoints, connection strings, keys, certificates, or deployment credentials.
 
 ## Aviation Boundary
 

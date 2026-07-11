@@ -75,6 +75,7 @@ flowchart TB
     Monitor["Azure Monitor and Application Insights"]
     CICD["CI/CD quality gate"]
     ModelGov["Model governance"]
+    AzureMapping["Azure architecture mapping<br/>(Milestone 11 reference only)"]
   end
 
   Schedule --> BatchProducer
@@ -124,7 +125,9 @@ flowchart TB
   Purview -. lineage .- Lake
   Monitor -. future telemetry mapping .- MonitoringEvidence
   CICD -. validation .- Quality
+  CICD -. static architecture validation .- AzureMapping
   ModelGov -. approvals .- Analytics
+  AzureMapping -. reference skeletons .- Controls
 ```
 
 ## Cross-Cutting Concerns
@@ -139,3 +142,6 @@ flowchart TB
   sensitivity expectations.
 - Model governance will track features, training windows, evaluation results, metadata, approval
   status, and operational limitations.
+- Milestone 11 adds Azure target-state architecture mapping, reference-only infrastructure
+  skeletons, and static safety validation. It does not provision Azure resources or introduce live
+  cloud clients.

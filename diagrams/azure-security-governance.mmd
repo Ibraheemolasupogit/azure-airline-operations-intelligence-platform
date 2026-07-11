@@ -1,0 +1,39 @@
+flowchart TB
+  subgraph Identity["Identity and access"]
+    Entra["Microsoft Entra ID"]
+    ManagedIdentity["Managed identities"]
+    RBAC["Least-privilege RBAC"]
+  end
+
+  subgraph Protection["Protection controls"]
+    KeyVault["Azure Key Vault"]
+    PrivateEndpoints["Private endpoints"]
+    NetworkIsolation["Virtual network isolation"]
+  end
+
+  subgraph Governance["Governance and audit"]
+    Diagnostics["Diagnostic settings"]
+    Logs["Log Analytics audit evidence"]
+    Purview["Microsoft Purview lineage"]
+    Classification["Synthetic data classification"]
+    Retention["Retention policies"]
+  end
+
+  subgraph ResponsibleAI["Responsible AI and aviation safety"]
+    ModelCards["Model cards and metric reports"]
+    PromptAudit["Prompt and response audit"]
+    Guardrails["Content safety and guardrails"]
+    HumanReview["Human review workflow"]
+    SafetyBoundary["Not certified operations control"]
+  end
+
+  Entra --> ManagedIdentity --> RBAC
+  RBAC --> KeyVault
+  RBAC --> Purview
+  KeyVault --> PrivateEndpoints --> NetworkIsolation
+  Diagnostics --> Logs --> Purview
+  Classification --> Purview
+  Retention --> Purview
+  ModelCards --> HumanReview
+  PromptAudit --> Guardrails --> HumanReview
+  HumanReview --> SafetyBoundary

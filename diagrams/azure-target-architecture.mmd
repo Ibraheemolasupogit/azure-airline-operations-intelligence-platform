@@ -1,0 +1,74 @@
+flowchart TB
+  subgraph Local["GitHub Actions local CI boundary"]
+    CI["Static checks, tests, synthetic runs"]
+    LocalData["Local data, outputs, reports, dashboard exports"]
+  end
+
+  subgraph Ingestion["Ingestion target"]
+    EventHubs["Azure Event Hubs"]
+    DataFactory["Azure Data Factory or Fabric Data Factory"]
+    Functions["Azure Functions control checks"]
+  end
+
+  subgraph Lake["ADLS Gen2 zones"]
+    Raw["Raw container"]
+    Interim["Interim and quarantine container"]
+    Processed["Processed curated container"]
+    Analytics["Analytics evidence container"]
+    Evidence["Governed reports container"]
+  end
+
+  subgraph Intelligence["Analytics and AI"]
+    AML["Azure Machine Learning batch jobs"]
+    Foundry["Azure AI Foundry"]
+    OpenAI["Azure OpenAI future model boundary"]
+    ContentSafety["Azure AI Content Safety"]
+  end
+
+  subgraph Observability["Monitoring and telemetry"]
+    Monitor["Azure Monitor"]
+    Logs["Log Analytics"]
+    AppInsights["Application Insights"]
+    DataExplorer["Azure Data Explorer"]
+  end
+
+  subgraph Consumption["Consumption"]
+    Fabric["Microsoft Fabric Lakehouse or Warehouse"]
+    PowerBI["Power BI semantic model and reports"]
+  end
+
+  subgraph Governance["Security and governance"]
+    Entra["Microsoft Entra ID"]
+    KeyVault["Azure Key Vault"]
+    PrivateNetwork["Private networking and endpoints"]
+    Purview["Microsoft Purview"]
+  end
+
+  CI --> LocalData
+  LocalData -. future mapping .-> EventHubs
+  LocalData -. scheduled ingestion mapping .-> DataFactory
+  EventHubs --> Raw
+  DataFactory --> Raw
+  Functions --> Raw
+  Raw --> Interim --> Processed
+  Processed --> AML --> Analytics
+  Analytics --> Foundry
+  Evidence --> Foundry
+  Foundry --> OpenAI
+  Foundry --> ContentSafety
+  Processed --> Fabric --> PowerBI
+  Analytics --> Fabric
+  Evidence --> PowerBI
+  AML --> Monitor
+  DataFactory --> Logs
+  Foundry --> AppInsights
+  Logs --> DataExplorer
+  Entra --> DataFactory
+  Entra --> AML
+  KeyVault --> Foundry
+  PrivateNetwork --> Lake
+  PrivateNetwork --> Intelligence
+  Purview --> Raw
+  Purview --> Processed
+  Purview --> Analytics
+  Purview --> Evidence

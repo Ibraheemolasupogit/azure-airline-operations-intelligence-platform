@@ -1,0 +1,144 @@
+azure_mapping:
+  project_name: azure-airline-operations-intelligence-platform
+  deployment_mode: reference_only
+  deployment_allowed: false
+  environments:
+    - dev
+    - test
+    - prod
+
+resource_groups:
+  pattern: rg-aoi-{environment}-{region}
+  default_region: uksouth
+  naming_prefix: aoi
+  workload: airline-operations-intelligence
+
+data_zones:
+  raw:
+    local_path: data/raw
+    azure_service: Azure Data Lake Storage Gen2
+    container: raw
+    purpose: Synthetic raw source landing zone with manifests.
+  interim:
+    local_path: data/interim
+    azure_service: Azure Data Lake Storage Gen2
+    container: interim
+    purpose: Quarantine, normalization, and intermediate validation evidence.
+  processed:
+    local_path: data/processed
+    azure_service: Azure Data Lake Storage Gen2
+    container: processed
+    purpose: Curated governed operational data.
+  analytics_outputs:
+    local_path: outputs
+    azure_service: Azure Data Lake Storage Gen2
+    container: analytics
+    purpose: Forecasting, prediction, maintenance, disruption, monitoring, and assistant evidence.
+  reporting:
+    local_path: reports
+    azure_service: Azure Data Lake Storage Gen2
+    container: evidence
+    purpose: Governed reports, lineage, model cards, and architecture evidence.
+  dashboard:
+    local_path: dashboard/outputs
+    azure_service: Microsoft Fabric or Power BI
+    container: dashboard
+    purpose: Power BI-ready local analytical exports and semantic model specifications.
+
+services:
+  ingestion:
+    - Azure Event Hubs
+    - Azure Data Factory
+    - Azure Functions
+  storage:
+    - Azure Data Lake Storage Gen2
+    - Microsoft Fabric Lakehouse
+  validation:
+    - Azure Data Factory
+    - Microsoft Purview
+    - Log Analytics
+  ml:
+    - Azure Machine Learning
+  genai:
+    - Azure AI Foundry
+    - Azure OpenAI
+    - Azure AI Content Safety
+  monitoring:
+    - Azure Monitor
+    - Log Analytics
+    - Application Insights
+    - Azure Data Explorer
+  dashboard:
+    - Microsoft Power BI
+    - Microsoft Fabric Lakehouse
+  governance:
+    - Microsoft Purview
+    - Microsoft Entra ID
+    - Azure Key Vault
+  networking:
+    - Azure Private Link
+    - Azure Virtual Network
+
+security_controls:
+  identity:
+    - Microsoft Entra ID groups per environment and persona.
+    - Managed identities for platform services.
+  rbac:
+    - Least-privilege role assignments by data zone and service boundary.
+    - Separate reader, contributor, operator, and owner duties.
+  secrets:
+    - Azure Key Vault for future runtime secrets.
+    - No secrets in repository configuration or reference templates.
+  network:
+    - Private endpoints for storage, Key Vault, monitoring, ML, and AI services.
+    - Public network access disabled in production target state.
+  audit:
+    - Diagnostic settings to Log Analytics.
+    - Immutable evidence retained for governed review.
+
+governance_controls:
+  lineage:
+    - Microsoft Purview collection per environment.
+    - Manifest checksums and run IDs mapped to Purview lineage entities.
+  classification:
+    - Synthetic operational analytics classification for all current data.
+    - Future sensitivity labels before any real data onboarding.
+  retention:
+    - Shorter retention in dev and test.
+    - Policy-approved retention in production.
+  responsible_ai:
+    - Human review for ML scores, assistant responses, and operational recommendations.
+    - Synthetic-data and aviation-safety disclaimers retained in evidence.
+
+monitoring_mappings:
+  metrics: Log Analytics custom tables and Azure Monitor metrics.
+  alerts: Scheduled query rules routed to human-review queues.
+  telemetry: Application Insights for pipeline execution telemetry.
+  operational_analytics: Azure Data Explorer for high-volume telemetry exploration.
+
+ml_mappings:
+  passenger_forecasting: Azure Machine Learning batch job with registered model candidate evidence.
+  delay_prediction: Azure Machine Learning batch scoring and model registry candidate.
+  maintenance_analytics: Azure Machine Learning deterministic scoring job with safety disclaimers.
+  disruption_scoring: Azure Machine Learning batch scoring job with recovery-priority evidence.
+
+genai_mappings:
+  assistant_runtime: Azure AI Foundry project boundary.
+  model_mapping: Azure OpenAI deployment mapping for future implementation only.
+  prompt_flow: Prompt Flow design for grounded local-evidence retrieval.
+  guardrails: Azure AI Content Safety and deterministic policy checks.
+  audit: Prompt, transcript, evidence-pack, and response audit storage.
+
+dashboard_mappings:
+  semantic_model: Power BI semantic model or Fabric semantic model.
+  lakehouse: Fabric Lakehouse or Warehouse curated dashboard tables.
+  reports: Power BI report pages based on local page specifications.
+  refresh: Future managed refresh with pre-refresh quality checks.
+  publishing: Documented future concept only; no live publishing in this repository.
+
+non_deployment_policy:
+  reference_templates_only: true
+  deployment_allowed: false
+  ci_executes_iac: false
+  requires_azure_credentials: false
+  contains_live_resource_ids: false

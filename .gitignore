@@ -22,6 +22,7 @@ env/
 *.pfx
 *.p12
 secrets/
+.azure/
 
 # Generated data and artefacts
 data/raw/*
@@ -46,6 +47,8 @@ outputs/monitoring/*
 outputs/genai_assistant/*
 dashboard/outputs/*
 reports/dashboard_outputs/*
+!reports/architecture/
+!reports/architecture/*.md
 *.log
 data/raw/.*.tmp/
 data/interim/.*.tmp/
@@ -80,6 +83,9 @@ mlruns/
 .terraform/
 *.tfstate
 *.tfstate.*
+terraform.tfvars
+*.auto.tfvars
+*.tfvars.json
 
 # IDE and OS files
 .DS_Store

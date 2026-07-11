@@ -1,0 +1,5 @@
+# Reference only, non-deploying architecture example.
+# No Azure resources are provisioned by this repository.
+
+environment = "dev"
+region      = "uksouth"

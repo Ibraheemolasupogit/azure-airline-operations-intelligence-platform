@@ -22,13 +22,16 @@ make quality
 
 ## Milestone Discipline
 
-Keep changes scoped to the active roadmap milestone. Milestone 10 adds local dashboard-ready
-analytical exports only; do not add route or schedule optimisation, Azure deployment templates,
-live Azure Monitor clients, Power BI or Fabric publishing clients, OpenAI or Azure OpenAI SDKs,
-Azure AI Foundry clients, alert routing, production incident automation, or later-milestone
-runtime features until their roadmap milestone is active.
+Keep changes scoped to the active roadmap milestone. Milestone 11 adds Azure target-state
+architecture mapping and reference-only infrastructure skeletons only; do not add route or
+schedule optimisation, live Azure deployment workflows, Azure SDK clients, Power BI or Fabric
+publishing clients, OpenAI or Azure OpenAI SDKs, alert routing, production incident automation, or
+Milestone 12 portfolio polish until their roadmap milestone is active.
 
 Generated runs under `data/raw/`, `data/interim/`, `data/processed/`, and `reports/validation/`
 plus analytics, monitoring, and assistant outputs under `outputs/` and `reports/` are local
 artefacts and must not be committed. Generated dashboard outputs under `dashboard/outputs/` and
 `reports/dashboard_outputs/` are also ignored runtime artefacts.
+
+Run `make validate-azure-architecture` when changing Azure architecture docs, mapping config, or
+reference infrastructure skeletons.
